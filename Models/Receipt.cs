@@ -12,6 +12,7 @@ namespace Driver.Models
         public int ClientId { get; set; }
         public decimal Amount { get; set; }
         public decimal Balance { get; set; }
+        public string Reference { get; set; }
         public bool Active { get; set; }
         public string Observation { get; set; }
         public DateTime CreateAt { get; set; }
