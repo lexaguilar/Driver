@@ -7,6 +7,7 @@ import Title from '../../components/shared/Title';
 import { dataAccess, editorOptionsSwitch, resources } from '../../data/app';
 import useAuthorization from '../../hooks/useAuthorization';
 import { store } from '../../services/store';
+import { copyText } from '../../utils/common';
 import uri from '../../utils/uri';
 
 const Clients = () => {
@@ -29,6 +30,20 @@ const Clients = () => {
         });
     }  
 
+    const addMenuItems = (e) => {
+
+        if (e.target == "content") {
+            if (!e.items) e.items = [];
+ 
+            e.items.push({
+                text: `Copiar`,
+                icon :  'unselectall',
+                onItemClick: () => copyText(e.row.values[e.columnIndex]) 
+            });
+        }
+    }
+
+
     const title = 'Clientes'
     
     return authorized(
@@ -45,6 +60,7 @@ const Clients = () => {
                 allowColumnReordering={true}
                 hoverStateEnabled={true}
                 onToolbarPreparing={onToolbarPreparing}
+                onContextMenuPreparing={addMenuItems}
             >
                 <Paging defaultPageSize={20} />
                 <Pager
@@ -54,10 +70,7 @@ const Clients = () => {
                 <FilterRow visible={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                 <Column dataField="identification" caption="Identificacion"  width={140}/>
-                <Column dataField="name" caption="Nombre completo" />
-                <Column dataField="sexId" caption="Sexo" width={100}>
-                    <Lookup dataSource ={["M","F"]} ></Lookup>
-                </Column>
+                <Column dataField="name" caption="Nombre completo" />             
                 <Column dataField="phoneNumber" width={110} caption="Telefono" />
                 <Column dataField="celularNumber" width={110} caption="Celular" />
                 <Column dataField="address" caption="Direccion" allowFiltering={false} />
@@ -77,13 +90,12 @@ const Clients = () => {
                         <Item  dataField="name" caption="Nombre" colSpan={2} >
                             <RequiredRule message="El campo es requerida"/>
                             <StringLengthRule max={100} min={2} message="Máximo de caracteres 100 y 2 mínimo"/>
-                        </Item>
-                        <Item  dataField="sexId" colSpan={2}>
-                            <RequiredRule message="El campo es requerida"/>
-                        </Item>  
+                        </Item>                        
                         <Item  dataField="phoneNumber" editorOptions={{mask: "0000-0000"}} colSpan={2}></Item>  
                         <Item  dataField="celularNumber"  editorOptions={{mask: "0000-0000"}} colSpan={2}></Item>  
-                        <Item  dataField="address"  colSpan={2} editorType="dxTextArea"></Item>  
+                        <Item  dataField="address"  colSpan={2} editorType="dxTextArea">
+                            <StringLengthRule max={250} message="Maximo de carateres permitidos 250" />
+                        </Item>  
                     </Form>
                 </Editing>
             </DataGrid>

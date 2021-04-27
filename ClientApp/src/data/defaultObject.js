@@ -23,3 +23,32 @@ export const purchaseDefault = {
     observaction: '',
     rate : 0,
 }
+
+export const dataDefault = {
+    name: '',
+    identification: '',
+    address: '',
+    phoneNumber: '',
+    startDate: new Date(moment().year(), moment().month(), moment().date(), 0, 0, 0, 0),
+    subTotal: 0,
+    discount: 0,
+    total: 0,
+    initBalance: 0,
+    balance: 0,
+    categoryOne: false,
+    categoryTwo: false,
+    categoryThree: false,
+    typeLicenceId: undefined,
+    instructorId: 1,
+    observation: '',
+    reference: ''
+}
+
+export const dataReceipt = { 
+   
+        date:new Date(moment().year(), moment().month(), moment().date(), 0, 0, 0, 0),
+        observation:'',
+        amount: 0,
+        reference:''
+    
+}

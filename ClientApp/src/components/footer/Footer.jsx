@@ -34,7 +34,7 @@ class Footer extends Component {
                         </div>
                         {showInfo && 
                             <div className="site-footer__payments">
-                                <i className="fa fa-home text-danger"></i> Area : {user.area}
+                                <i className="fa fa-home text-danger"></i> Sucursal : {user.area}
                             </div>
                         }
                     </div>

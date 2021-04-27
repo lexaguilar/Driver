@@ -10,6 +10,7 @@ namespace Driver.Models
         public int Id { get; set; }
         public string Sucursal { get; set; }
         public int AreaId { get; set; }
+        public int ClientId { get; set; }
         public string Identification { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
@@ -26,6 +27,7 @@ namespace Driver.Models
         public DateTime ModifyAt { get; set; }
         public string ModifyBy { get; set; }
         public string Categories { get; set; }
+        public bool Active { get; set; }
         public decimal? Balance { get; set; }
     }
 }

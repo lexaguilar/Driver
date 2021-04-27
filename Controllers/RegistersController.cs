@@ -21,12 +21,32 @@ namespace Driver.Controllers
             this._db = db;
         }
 
+        [Route("api/registers/get/{id}")]
+        public IActionResult Get(int id)
+        {
+            var register = _db.Registers
+            .Include(x => x.Client)
+            .Include(x => x.TypeLicence)
+            .Include(x => x.Receipts)
+            .Include(x => x.Instructor)
+            .FirstOrDefault(x => x.Id == id);
+            
+            return Json(register);
+
+
+        }
 
         [Route("api/registers/get")]
         public IActionResult Get(int skip, int take, IDictionary<string, string> values)
         {
 
             IQueryable<VwRegister> registers = _db.VwRegisters.OrderByDescending(x => x.Id);
+
+            if (values.ContainsKey("id"))
+            {
+                var id = Convert.ToInt32(values["id"]);
+                registers = registers.Where(x => x.Id == id);
+            }
 
             if (values.ContainsKey("name"))
             {
@@ -97,11 +117,13 @@ namespace Driver.Controllers
             if (oldReceipt != null)
                 return BadRequest($"El número de recibo {register.Reference} ya esta registrado en la matricula {oldReceipt.Register.Id}");
 
-            if(register.InitBalance >= 0 && string.IsNullOrEmpty(register.Reference)){
+            if (register.InitBalance > 0 && string.IsNullOrEmpty(register.Reference))
+            {
                 return BadRequest($"Debe de indicar el número de recibo cuando se ingresa un abono a la matricula");
             }
 
-            if(register.InitBalance == 0 && !string.IsNullOrEmpty(register.Reference)){
+            if (register.InitBalance == 0 && !string.IsNullOrEmpty(register.Reference))
+            {
                 return BadRequest($"Quite el número de recibo cuando el abono sea 0 para poder continuar");
             }
 
@@ -145,6 +167,8 @@ namespace Driver.Controllers
                     Categories = string.Join(",", register.categories.OrderBy(x => x)),
                     TypeLicenceId = register.TypeLicenceId,
 
+                    Active = true,
+
                     ModifyAt = DateTime.Now,
                     ModifyBy = user.Username,
                     CreateAt = DateTime.Now,
@@ -166,6 +190,7 @@ namespace Driver.Controllers
                         Reference = register.Reference,
                         Active = true,
                         Observation = "",
+                        Date = DateTime.Today,
                         CreateAt = DateTime.Now,
                         CreateBy = user.Username
 
@@ -173,7 +198,7 @@ namespace Driver.Controllers
 
                     newRegister.Receipts.Add(newReceipt);
 
-                }               
+                }
 
                 _db.Registers.Add(newRegister);
                 _db.SaveChanges();
@@ -184,6 +209,120 @@ namespace Driver.Controllers
 
         }
 
+        [HttpPost("api/registers/put")]
+        public IActionResult Put([FromBody] CalificationRequest register)
+        {
+
+
+            var oldReceipt = _db.Receipts.Include(x => x.Register)
+              .FirstOrDefault(x => x.Reference == register.Reference);
+
+            if (oldReceipt != null)
+                return BadRequest($"El número de recibo {register.Reference} ya esta registrado en la matricula {oldReceipt.Register.Id}");
+
+            if (register.ApplyPay && string.IsNullOrEmpty(register.Reference))
+                return BadRequest($"Debe de indicar el número de recibo cuando marque la opción de aplicar pago");
+
+            if (register.ApplyPay && register.Amount == 0)
+                return BadRequest($"Debe de indicar el monto cuando marque la opción de aplicar pago");
+
+
+            var oldRegister = _db.Registers.Include(x => x.Receipts).FirstOrDefault(x => x.Id == register.Id);
+
+            if (oldRegister == null)
+                return BadRequest($"No se encontro la matricula con codigo {register.Id}");
+
+            if (!oldRegister.Active)
+                return BadRequest($"La matricula seleccionada({register.Id}) no esta activa");
+
+
+            var user = this.GetAppUser();
+
+            oldRegister.EndDate = register.EndDate;
+            oldRegister.NoteTheoretical = register.NoteTheoretical;
+            oldRegister.NotePractice = register.NotePractice;
+            oldRegister.DateTheoretical = register.DateTheoretical;
+            oldRegister.DatePractice = register.DatePractice;
+            oldRegister.Acta = register.Acta;
+            oldRegister.Folio = register.Folio;
+            oldRegister.Book = register.Book;
+            oldRegister.ActaYear = register.ActaYear;
+
+
+            oldRegister.ModifyAt = DateTime.Now;
+            oldRegister.ModifyBy = user.Username;
+
+            var client = _db.Clients.FirstOrDefault(x => x.Id == oldRegister.ClientId);
+
+            if (register.ApplyPay)
+            {
+
+                var amount = oldRegister.Receipts.Sum(x => x.Amount);
+
+                var newReceipt = new Receipt
+                {
+
+                    Register = oldRegister,
+                    Client = client,
+                    Amount = register.Amount,
+                    Balance = oldRegister.Total - (amount + register.Amount),
+                    Reference = register.Reference,
+                    Active = true,
+                    Observation = "Pago completado",
+                    Date = DateTime.Today,
+                    CreateAt = DateTime.Now,
+                    CreateBy = user.Username
+
+                };
+
+                oldRegister.Payoff = oldRegister.Total == (amount + register.Amount);
+
+                oldRegister.Receipts.Add(newReceipt);
+
+            }
+
+            _db.SaveChanges();
+
+            return Json(register);
+
+        }
+
+        [HttpPost("api/registers/updateinfo")]
+        public IActionResult UpdateInfo([FromBody] UpdateRequest register)
+        {
+
+            var model = _db.Registers.FirstOrDefault(x => x.Id == register.Id);
+
+            var user = this.GetAppUser();
+          
+            model.Observation = register.Observation;
+            model.ModifyAt = DateTime.Now;
+            model.ModifyBy = user.Username;
+
+            _db.SaveChanges();
+
+            return Json(register);
+
+        }
+
+        [HttpPost("api/registers/{id}/delete")]
+        public IActionResult Delete([FromBody] CancelRequest register)
+        {
+
+            var model = _db.Registers.FirstOrDefault(x => x.Id == register.Id);
+
+            var user = this.GetAppUser();
+
+            model.Active = false;
+            model.MotiveCancel = register.MotiveCancel;
+            model.ModifyAt = DateTime.Now;
+            model.ModifyBy = user.Username;
+
+            _db.SaveChanges();
+
+            return Json(register);
+
+        }
 
     }
 }

@@ -8,10 +8,20 @@ import { dataAccess, formatDate, formatDateTime, resources } from '../../data/ap
 import useAuthorization from '../../hooks/useAuthorization';
 import { store } from '../../services/store';
 import { registerDialog } from '../../store/register/registerReducer';
-import { cellRender, cellRenderBold } from '../../utils/common';
+import { calificationDialog } from '../../store/calification/calificationReducer';
+import { cancelRegisterDialog } from '../../store/cancelRegister/cancelRegisterReducer';
+import { detailsDialog } from '../../store/details/detailsReducer';
+import { receiptDialog  } from '../../store/receipt/receiptReducer';
+import { cellRenderBold, copyText } from '../../utils/common';
 import { createStore } from '../../utils/proxy';
+import urlReport from '../../services/reportServices';
 import uri from '../../utils/uri';
 import Nuevo from './Nuevo';
+import Calification from './Calification';
+import http from '../../utils/http';
+import DialogCancel from './DialogCancel';
+import Details from './Details';
+import Recibo from './Recibo';
 
 const Registers = () => {
 
@@ -37,8 +47,52 @@ const Registers = () => {
 
     const load = () => dataGrid.current.instance.refresh();
 
-    const openDialog = id => {
-        dispatch(registerDialog({ open: true, id}));
+    const openDialog = id => dispatch(registerDialog({ open: true, id}));
+    const openDialogCalification = id => dispatch(calificationDialog({ open: true, id}));
+    const openDialogCancelRegister = id => dispatch(cancelRegisterDialog({ open: true, id}));
+    const openDialogDetails = id => dispatch(detailsDialog({ open: true, id}));
+    const openDialogReceipt = id => dispatch(receiptDialog({ open: true, id}));
+
+    const addMenuItems = (e) => {
+
+        if (e.target == "content") {
+            if (!e.items) e.items = [];
+ 
+            e.items.push({
+                text: `Nueva matricula`,
+                icon :  'plus',
+                onItemClick: () => openDialog(0)
+            },{
+                text: `Registrar notas`,
+                icon :  'edit',
+                onItemClick: () => openDialogCalification(e.row.data.id)
+            },{
+                text: `Detalles`,
+                icon :  'bulletlist',
+                onItemClick: () => openDialogDetails(e.row.data.id)
+            },{
+                text: `Generar recibo de pago`,
+                icon :  'money',
+                onItemClick: () => openDialogReceipt(e.row.data.id)
+            },{
+                text: `Imprimir certificado`,
+                icon :  'doc',
+                onItemClick: () => {                    
+
+                    const report = urlReport();
+                    report.print(`${report.certificate(e.row.data.id)}`);   
+
+                }
+            },{
+                text: `Anular matricula`,
+                icon :  'remove',
+                onItemClick: () => openDialogCancelRegister(e.row.data.id)          
+            },{
+                text: `Copiar`,
+                icon :  'unselectall',
+                onItemClick: () => copyText(e.row.values[e.columnIndex]) 
+            });
+        }
     }
 
     const onCellPrepared = e => {
@@ -53,22 +107,35 @@ const Registers = () => {
                     e.cellElement.classList.add('pendiente');  
                     
             if(e.column.dataField == 'id')
-                e.cellElement.classList.add('col-id-factura');  
+                e.cellElement.classList.add('col-id');  
         }
     
     }
 
-    const cellAsPayoff = data => {    
-        return <b>{data.value ? 'Pagada' : 'Pendiente'}</b>;
-    }  
+    const onRowPrepared = (e) => {
+        if (e.rowType == 'data') {
+
+            if (!e.data.active) 
+                e.rowElement.classList.add('no-activo');
+            
+        }
+    }
+
+    const cellAsPayoff = data => <b>{data.value ? 'Pagada' : 'Pendiente'}</b>;    
 
     const title = 'Matriculas';
     
     return authorized(
         <div className="container">
             <Title title={title}/>
-            <BlockHeader title={title}/>     
+            <BlockHeader title={title}/>   
+              
             <Nuevo onSave={load}/>     
+            <Calification onSave={load}/>     
+            <DialogCancel onCancel={load} />  
+            <Recibo onSave={load} />  
+            <Details/>
+
             <DataGrid id="gridContainer"
                 ref={dataGrid}
                 selection={{ mode: 'single' }}
@@ -82,6 +149,8 @@ const Registers = () => {
                 columnAutoWidth={true}
                 onCellPrepared={onCellPrepared}
                 onToolbarPreparing={onToolbarPreparing}
+                onContextMenuPreparing={addMenuItems}
+                onRowPrepared={onRowPrepared}
                 remoteOperations={{
                     paging: true,
                     filtering: true
@@ -96,7 +165,7 @@ const Registers = () => {
                 <ColumnChooser enabled={true} />
                 <FilterRow visible={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                <Column dataField="id" visible={false}/>
+                <Column dataField="id" caption="Codigo #"  width={80}/>
                 <Column dataField="areaId" caption="Sucursal" width={100}>
                     <Lookup dataSource ={createStore({name: 'Area'})} valueExpr="id" displayExpr="name" ></Lookup>
                 </Column>
@@ -106,7 +175,7 @@ const Registers = () => {
                 <Column dataField="typeLicenceId" caption="Tipo" width={120}>
                     <Lookup dataSource ={createStore({name: 'TypeLicence'})} valueExpr="id" displayExpr="name" ></Lookup>
                 </Column>
-                <Column dataField="categories" caption="Categorias" width={75} allowFiltering={false}/>
+                <Column dataField="categories" caption="Categorias" width={90} allowFiltering={false}/>
                 <Column dataField="startDate" caption="Inicio" dataType='date' format={formatDate} width={100} />   
                 <Column dataField="total" width={90} cellRender={cellRenderBold()}/>
                 <Column dataField="subTotal" visible={false} width={80} cellRender={cellRenderBold()}/>
@@ -119,16 +188,16 @@ const Registers = () => {
                 </Column>
                 <Column dataField="createBy" caption='Creado por' width={100} />
                 <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={180}/>
-                <Column dataField="modifyAt" caption='Modificado por' width={100} />
-                <Column dataField="modifyBy" caption='Modificado el' dataType='date'  format={formatDateTime} width={180}/>
-                <Column type="buttons" width={50}>
+                <Column dataField="modifyBy" caption='Modificado por' width={100} />
+                <Column dataField="modifyAt" caption='Modificado el' dataType='date'  format={formatDateTime} width={180}/>
+                {/* <Column type="buttons" width={50}>
                     <ButtonGrid name="modificar"icon="edit" onClick={e => openDialog(e.row.data.id)}/>
-                </Column>
-                <Editing                   
+                </Column> */}
+                {/* <Editing                   
                     allowUpdating={true}
                     useIcons={true}
                 >                    
-                </Editing>
+                </Editing> */}
             </DataGrid>
         </div>
     );

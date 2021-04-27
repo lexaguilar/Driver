@@ -20,10 +20,12 @@ import Users from '../pages/users/Users';
 import Receipts from '../pages/receipts/Receipts';
 import Instructors from '../pages/instructors/Instructors';
 import App from '../pages/app/App';
+import Resources from '../pages/resources';
+import Roles from '../pages/roles';
 
 
 function Layout(props) {
-    const { match, headerLayout } = props;
+    const { headerLayout } = props;
 
     let prop = (path, component) => ({exact:true, path : `${_path.root}/${path}`, component });
 
@@ -35,6 +37,8 @@ function Layout(props) {
         ,builRoute('clientes', Clients)
         ,builRoute('sucursales', Areas)
         ,builRoute('usuarios', Users)
+        ,builRoute('roles', Roles)
+        ,builRoute('permisos', Resources)
         ,builRoute('recibos', Receipts)
         ,builRoute('instructores', Instructors)
         ,builRoute('app', App)

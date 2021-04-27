@@ -1,6 +1,8 @@
 import React from "react";
 import { userService } from "../services/user.service";
 import MsgAuthorize from './MsgAuthorized';
+import { dataAccess } from "../data/app";
+
 const Authorized = isAuthorization => component => {
     return isAuthorization ? component : <MsgAuthorize/>
 }
@@ -23,7 +25,11 @@ const useAuthorization = ([resourceId, action]) => {
 
     return {
         isAuthorization,
-        authorized : Authorized(isAuthorization)
+        authorized : Authorized(isAuthorization),
+        auth : {
+            toDelete : (resource.action & dataAccess.delete) > 0,
+            toEdit : (resource.action & dataAccess.update) > 0,
+        } 
     }
 }
 

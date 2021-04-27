@@ -16,16 +16,18 @@ const menu = [{
     url: `${_path.root}/recibos`   
 },{
     layout: 'driver',
-    title: 'Instructores',
-    url: `${_path.root}/instructores`   
-},{
-    layout: 'driver',
-    title: 'Sucursales',
-    url: `${_path.root}/sucursales`   
-},{
-    layout: 'driver',
-    title: 'Usuarios',
-    url: `${_path.root}/usuarios`   
+    title: 'Configuración',
+    url: `` ,
+    submenu: {
+        type: 'menu',
+        menu: [
+            { title: 'Sucursales', url: `${_path.root}/sucursales` },
+            { title: 'Instructores', url: `${_path.root}/instructores` },
+            { title: 'Usuarios', url: `${_path.root}/usuarios` },
+            { title: 'Roles', url: `${_path.root}/roles` },
+            { title: 'Recursos', url: `${_path.root}/permisos` }
+        ],
+    },
 }];
 
 

@@ -44,6 +44,16 @@ export const obtenerTasaCambio  = date => {
 
 }
 
+export const copyText = text => {
+
+    let copyText = document.createElement("input");
+    copyText.setAttribute("value", text);
+    document.body.appendChild(copyText);
+    copyText.select();
+    document.execCommand('copy');
+    document.body.removeChild(copyText);
+
+}
 
 const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']
 export const getMonthName = index => months[index-1]; 

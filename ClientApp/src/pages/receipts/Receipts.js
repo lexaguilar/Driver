@@ -1,11 +1,15 @@
-import React from 'react';
 
-const Receipts = () => {
-    return (
+import React from 'react';
+import ReceiptsPreview from './ReceiptsPreview';
+
+const Receipts = () => {    
+    
+    return(
         <div className="container">
-            Receipts
+           <ReceiptsPreview />
         </div>
-    );
+    )
+    
 }
 
 export default Receipts;

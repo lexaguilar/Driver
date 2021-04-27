@@ -1,59 +1,24 @@
-import { Box, Button, CheckBox, DateBox, NumberBox, Popup, SelectBox, TextArea, TextBox, Validator } from 'devextreme-react';
-import { Item } from 'devextreme-react/box';
-import Form, { RequiredRule, GroupItem, Label, SimpleItem, AsyncRule, CustomRule, EmptyItem } from 'devextreme-react/form';
+import { Button, Popup } from 'devextreme-react';
+import Form, { RequiredRule, GroupItem, Label, SimpleItem, AsyncRule, EmptyItem, StringLengthRule } from 'devextreme-react/form';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { editorOptionsNumberBox, editorOptsTextBoxPhone, formatDate } from '../../data/app';
+import { dataAccess, editorOptionsNumberBox, editorOptsTextBoxPhone, formatDate, resources } from '../../data/app';
 import { registerDialog } from '../../store/register/registerReducer';
 import http from '../../utils/http';
 import { createStore } from '../../utils/proxy';
 import uri from '../../utils/uri';
+import { dataDefault } from '../../data/defaultObject';
 import notify from 'devextreme/ui/notify';
 import useTypeLicences from '../../hooks/useTypeLicences';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const Nuevo = props => {
+
+    const { authorized, auth } = useAuthorization([resources.matriculas, dataAccess.create ]);
 
     const dispatch = useDispatch();
     const { register: { open, id }, appInfo } = useSelector(store => store);
     const refForm = useRef();
-
-    const dataDefault = {
-        name: '',
-        identification: '',
-        address: '',
-        phoneNumber: '',
-        startDate: null,
-        subTotal: appInfo.price,
-        discount: 0,
-        total: appInfo.price,
-        initBalance: 0,
-        balance: appInfo.price,
-        categoryOne: false,
-        categoryTwo: false,
-        categoryThree: false,
-        typeLicenceId: undefined,
-        instructorId: 1,
-        observation: '',
-        reference: ''
-    }
-
-    // const dataDefault = {
-    //     name: 'silvia salvadora',
-    //     identification: '001-120687-0019f',
-    //     address: 'carretera norte',
-    //     phoneNumber: '8888-8888',
-    //     startDate: new Date(),
-    //     subTotal: appInfo.price,
-    //     discount: 0,
-    //     total: appInfo.price,
-    //     initBalance: 0,
-    //     balance: appInfo.price,
-    //     categories: [1, 3],
-    //     typeLicenceId: 2,
-    //     instructorId: 1,
-    //     observation: 'ninguna',
-    //     reference: '011'
-    // }
 
     const [data, setData] = useState({ ...dataDefault });
     const { typeLicences } = useTypeLicences();
@@ -74,11 +39,7 @@ const Nuevo = props => {
         }
     }
 
-    const onHiding = ({ load }) => {
-
-        closeDialog(load);
-
-    }
+    const onHiding = ({ load }) => closeDialog(load);
 
     const save = e => {
 
@@ -134,7 +95,7 @@ const Nuevo = props => {
         });
     }
 
-    return (
+    return authorized(
         <div>
             <Popup
                 width={580}
@@ -152,6 +113,7 @@ const Nuevo = props => {
                         </SimpleItem>
                         <SimpleItem dataField="identification" colSpan={3}>
                             <Label text="Cédula" />
+                            <StringLengthRule max={20} message="Maximo de carateres permitidos 20" />
                             <RequiredRule message="Complete este campo" />
                         </SimpleItem>
                         <SimpleItem dataField="phoneNumber" colSpan={3} editorOptions={{ ...editorOptsTextBoxPhone }}>
@@ -160,6 +122,7 @@ const Nuevo = props => {
                         </SimpleItem>
                         <SimpleItem dataField="address" colSpan={6} editorType="dxTextArea">
                             <Label text="Dirección" />
+                            <StringLengthRule max={250} message="Maximo de carateres permitidos 250" />
                             <RequiredRule message="Complete este campo" />
                         </SimpleItem>
                     </GroupItem>
@@ -177,8 +140,14 @@ const Nuevo = props => {
                             editorOptions={{
                                 ...editorOptionsNumberBox,
                                 onValueChanged: e => {
-                                    const total = data.subTotal - e.value;
-                                    setData({ ...data, total: total });
+                                    let discount = e.value;
+
+                                    if(discount < 0)
+                                        discount = 0;
+
+                                    const total = data.subTotal - discount ;
+                                    const balance = total - data.initBalance;
+                                    setData({ ...data, total: total,balance: balance, discount });
                                 }
                             }}>
                             <Label text="Descuento" />
@@ -193,8 +162,13 @@ const Nuevo = props => {
                                 ...editorOptionsNumberBox,
                                 onValueChanged: e => {
 
-                                    const balance = data.total - e.value;
-                                    setData({ ...data, balance: balance });
+                                    let initBalance = e.value;
+
+                                    if(initBalance < 0)
+                                        initBalance = 0;
+
+                                    const balance = data.total - initBalance;
+                                    setData({ ...data, balance: balance, initBalance });
 
                                 }
                             }}>
@@ -235,6 +209,7 @@ const Nuevo = props => {
                             <RequiredRule message="Complete este campo" />
                         </SimpleItem>
                         <SimpleItem dataField="observation" colSpan={6} editorType="dxTextArea">
+                            <StringLengthRule max={250} message="Maximo de carateres permitidos 250" />
                             <Label text="Observacion" />
                         </SimpleItem>
                     </GroupItem>

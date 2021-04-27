@@ -140,7 +140,7 @@ const Users = () => {
                     <Column dataField="username" width={140} allowEditing={false}/>
                     <Column dataField="fullName" caption="Nombre" />
                     <Column dataField="email" allowFiltering={false} />
-                    <Column dataField="areaId" width={150} caption="Area">
+                    <Column dataField="areaId" width={150} caption="Sucursal">
                         <Lookup disabled={true} dataSource={createStore({name :'area'})} valueExpr="id" displayExpr="name" />
                     </Column>
                     <Column dataField="rolId" width={160} caption="Permisos">
@@ -167,7 +167,7 @@ const Users = () => {
                                 <StringLengthRule max={50} min={5} message="Máximo de caracteres 50 y 5 mínimo" />
                             </Item>                          
                             <Item dataField="areaId" >
-                                <RequiredRule message="El area es requerida" />
+                                <RequiredRule message="La sucursal es requerida" />
                             </Item>
                             <Item dataField="rolId" >
                                 <RequiredRule message="El rol es requerido" />

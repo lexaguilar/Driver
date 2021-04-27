@@ -58,6 +58,7 @@ namespace Driver.Controllers
 
             client.ModifyAt = DateTime.Now;
             client.ModifyBy = user.Username;
+            client.SexId = "M";
 
             if (client.Id > 0)
             {
