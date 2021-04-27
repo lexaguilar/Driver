@@ -17,9 +17,6 @@ function MobileMenu(props) {
     const {
         mobileMenuState,
         closeMobileMenu,
-        changeLocale,
-        changeCurrency,
-        layout
     } = props;
 
     const classes = classNames('mobilemenu', {
@@ -27,12 +24,19 @@ function MobileMenu(props) {
     });
 
     const handleItemClick = (item) => {
-        if (item.data) {
-            if (item.data.type === 'language') {
-                changeLocale(item.data.locale);
+        closeMobileMenu();
+        //if (item.data) {
+            //if (item.data.type === 'language') {
                 closeMobileMenu();
-            }
-        }
+           // }
+            // if (item.data.type === 'currency') {
+            //     const currency = currencies.find((x) => x.currency.code === item.data.code);
+
+            //     if (currency) {
+            //         closeMobileMenu();
+            //     }
+            // }
+       // }
     };
 
     return (
@@ -48,7 +52,7 @@ function MobileMenu(props) {
                     </button>
                 </div>
                 <div className="mobilemenu__content">
-                    <MobileLinks links={mobileMenuLinks} layout={layout} onItemClick={handleItemClick} />
+                    <MobileLinks links={mobileMenuLinks} onItemClick={handleItemClick} />
                 </div>
             </div>
         </div>
@@ -60,7 +64,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-    closeMobileMenu: mobileMenuClose
+    closeMobileMenu: mobileMenuClose,   
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MobileMenu);

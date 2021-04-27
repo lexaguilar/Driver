@@ -7,13 +7,17 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 // application
+import Indicator from '../header/Indicator';
 import {
     Menu18x14Svg,
+    LogoSmallSvg,
     Search20Svg,
     Cross20Svg,
+    Heart20Svg,
+    Cart20Svg,
 } from '../../svg';
 import { mobileMenuOpen } from '../../store/mobile-menu';
-import {logo} from '../../data/logo'
+
 
 class MobileHeader extends Component {
     constructor(props) {
@@ -69,7 +73,7 @@ class MobileHeader extends Component {
     };
 
     render() {
-        const { openMobileMenu } = this.props;
+        const { openMobileMenu, wishlist, cart } = this.props;
         const { searchOpen } = this.state;
         const searchClasses = classNames('mobile-header__search', {
             'mobile-header__search--opened': searchOpen,
@@ -83,13 +87,13 @@ class MobileHeader extends Component {
                             <button type="button" className="mobile-header__menu-button" onClick={openMobileMenu}>
                                 <Menu18x14Svg />
                             </button>
-                            <Link to="/">{logo}</Link>
+                            <Link to="/" className="mobile-header__logo">Driver's</Link>
                             <div className={searchClasses} ref={this.setSearchWrapperRef}>
                                 <form className="mobile-header__search-form" action="">
                                     <input
                                         className="mobile-header__search-input"
                                         name="search"
-                                        placeholder="Search over 10,000 products"
+                                        placeholder="Buscar cliente"
                                         aria-label="Site search"
                                         type="text"
                                         autoComplete="off"
@@ -110,7 +114,13 @@ class MobileHeader extends Component {
                                 </form>
                             </div>
 
-                           
+                            <div className="mobile-header__indicators">
+                                <Indicator
+                                    className="indicator--mobile indicator--mobile-search d-sm-none"
+                                    onClick={this.handleOpenSearch}
+                                    icon={<Search20Svg />}
+                                />                              
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -119,13 +129,16 @@ class MobileHeader extends Component {
     }
 }
 
-
+const mapStateToProps = (state) => ({
+    cart: state.cart,
+    wishlist: state.wishlist,
+});
 
 const mapDispatchToProps = {
     openMobileMenu: mobileMenuOpen,
 };
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps,
 )(MobileHeader);

@@ -1,25 +1,27 @@
 /*
 // .mobile-header
 */
+
 @import '../variables';
 @import '../functions';
 @import '../mixins/direction';
-
-
 .mobile-header {
     height: $nav-panel-height;
 }
+
 .mobile-header__panel {
-    background: $nav-panel-bg;
+    background: #337ab7;
     box-shadow: $nav-panel-shadow;
-    color: $nav-panel-font-color;
+    color: #ffffff;
     position: relative;
 }
+
 .mobile-header__body {
     display: flex;
     align-items: center;
     height: $nav-panel-height;
 }
+
 .mobile-header__menu-button {
     flex-shrink: 0;
     width: 36px;
@@ -35,54 +37,47 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
     &:focus {
         outline: none;
     }
-
     &:focus,
     &:hover {
         background: $mobile-header-menu-button-hover-bg;
         fill: $mobile-header-menu-button-hover-color;
     }
 }
+
 .mobile-header__indicators {
     display: flex;
-
     @include direction {
         #{$margin-inline-start}: auto;
     }
 }
+
 .mobile-header__logo {
     margin: 0;
     color: inherit;
     fill: currentColor;
-
     @include direction {
         #{$margin-inline-end}: 16px;
         #{$margin-inline-start}: 12px;
     }
-
     &:hover {
         color: inherit;
     }
-
     svg {
         display: block;
     }
 }
-
 
 @media (min-width: breakpoint(sm-start)) and (max-width: breakpoint(md-end)) {
     .mobile-header__search {
         flex-grow: 1;
         height: 36px;
         position: relative;
-
         @include direction {
             #{$margin-inline-end}: 8px;
         }
-
         input {
             position: relative;
             z-index: 1;
@@ -96,32 +91,26 @@
             font-family: inherit;
             font-size: 15px;
             color: $mobile-header-search-input-default-font-color;
-
             &::placeholder {
                 color: $mobile-header-search-input-default-placeholder;
             }
-
             &:hover {
                 color: $mobile-header-search-input-hover-font-color;
-
                 &::placeholder {
                     color: $mobile-header-search-input-hover-placeholder;
                 }
             }
-
             &:focus {
                 color: $mobile-header-search-input-focus-font-color;
                 outline: none;
-
                 &::placeholder {
                     color: $mobile-header-search-input-focus-placeholder;
                 }
             }
         }
-        input:hover ~ {
+        input:hover~ {
             & .mobile-header__search-button {
                 fill: $mobile-header-search-input-hover-icon-color;
-
                 &:focus,
                 &:hover {
                     fill: $mobile-header-search-input-hover-icon-hover-color;
@@ -132,10 +121,9 @@
                 box-shadow: $mobile-header-search-input-hover-shadow;
             }
         }
-        input:focus ~ {
+        input:focus~ {
             & .mobile-header__search-button {
                 fill: $mobile-header-search-input-focus-icon-color;
-
                 &:focus,
                 &:hover {
                     fill: $mobile-header-search-input-focus-icon-hover-color;
@@ -146,7 +134,6 @@
                 box-shadow: $mobile-header-search-input-focus-shadow;
             }
         }
-
         div {
             pointer-events: none;
             position: absolute;
@@ -157,7 +144,6 @@
             box-shadow: $mobile-header-search-input-default-shadow;
             transition: all .2s;
             border-radius: 2px;
-
             @include direction {
                 #{$inset-inline-start}: 0;
             }
@@ -182,7 +168,6 @@
         cursor: pointer;
         fill: $mobile-header-search-input-default-icon-color;
         transition: fill .2s;
-
         &:focus {
             outline: none;
         }
@@ -195,6 +180,7 @@
         display: none;
     }
 }
+
 @media (max-width: breakpoint(xs-end)) {
     .mobile-header__search {
         top: 0;
@@ -207,16 +193,13 @@
         visibility: hidden;
         opacity: 0;
         transition: transform .3s, visibility 0s .3s, opacity .3s;
-
         @include direction {
             #{$inset-inline-start}: 0;
         }
-
         form {
             height: 54px;
             display: flex;
         }
-
         input {
             flex-grow: 1;
             flex-basis: 0;
@@ -224,29 +207,23 @@
             background: transparent;
             border: none;
             padding: 0;
-
             @include direction {
                 #{$padding-inline-start}: 15px;
             }
-
             &:focus {
                 outline: none;
             }
-
             &::placeholder {
                 color: $offcanvas-search-placeholder-color;
             }
         }
     }
-
     .mobile-header__search--opened {
         transition-delay: 0s, 0s;
         transform: translateY(0);
         visibility: visible;
         opacity: 1;
     }
-
-
     .mobile-header__search-button {
         flex-shrink: 0;
         background: transparent;
@@ -257,11 +234,9 @@
         width: 54px;
         cursor: pointer;
         fill: $offcanvas-search-button-default-color;
-
         &:focus {
             outline: none;
         }
-
         &:focus,
         &:hover {
             fill: $offcanvas-search-button-hover-color;

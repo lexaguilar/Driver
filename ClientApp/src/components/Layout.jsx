@@ -9,6 +9,7 @@ import HomePage from './home/HomePage';
 // application
 import Footer from './footer';
 import Header from './header';
+import MobileHeader from './mobile/MobileHeader';
 import MobileMenu from './mobile/MobileMenu';
 
 import { _path } from '../data/headerNavigation';
@@ -53,7 +54,9 @@ function Layout(props) {
             <MobileMenu layout={headerLayout}/>
 
             <div className="site">
-
+                <header className="site__header d-lg-none">
+                    <MobileHeader />
+                </header>
                 <header className="site__header d-lg-block d-none">
                     <Header layout={headerLayout} />
                 </header>

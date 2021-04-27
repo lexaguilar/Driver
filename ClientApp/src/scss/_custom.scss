@@ -37,6 +37,18 @@
         }
     }
     
+    @media (min-width: 300px) {
+        .wrapper-login {
+            padding-top: 20px;
+        }
+    }
+    
+    @media (min-width: 768px) {
+        .wrapper-login {
+            padding-top: 100px;
+        }
+    }
+    
     .links {
         color: #1976D2;
         padding: 0;
@@ -170,10 +182,6 @@
     
     .item-price {
         font-size: 14px;
-    }
-    
-    .wrapper-login {
-        padding-top: 100px;
     }
     
     .form-signin {

@@ -11,7 +11,7 @@ import { ArrowRoundedDown12x7Svg } from '../../svg';
 
 
 function MobileLinks(props) {
-    const { links, level, onItemClick , layout} = props;
+    const { links, level, onItemClick } = props;
 
     const handleItemClick = (item) => {
         if (onItemClick) {
@@ -19,7 +19,7 @@ function MobileLinks(props) {
         }
     };
 
-    const linksList = links.filter(x => x.layout == layout).map((link, index) => {
+    const linksList = links.map((link, index) => {
         let item;
 
         if (link.type === 'link' || link.type === 'button') {
