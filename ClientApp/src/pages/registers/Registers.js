@@ -22,11 +22,12 @@ import http from '../../utils/http';
 import DialogCancel from './DialogCancel';
 import Details from './Details';
 import Recibo from './Recibo';
+import { Label } from 'devextreme-react/form';
 
 const Registers = () => {
 
     const dispatch = useDispatch();
-    const [viewComplete, setViewComplete] = useState(false);
+    const [viewComplete, setViewComplete] = useState(true);
 
     const { authorized } = useAuthorization([resources.matriculas, dataAccess.access ]);
 
@@ -128,6 +129,7 @@ const Registers = () => {
         <div className="container">
             <Title title={title}/>
             <BlockHeader title={title}>
+                <Label text={"Hola"}></Label>
                 <Switch defaultValue={true} 
                         switchedOffText="NO"
                         switchedOnText="SI"
@@ -182,13 +184,13 @@ const Registers = () => {
                 <Column dataField="typeLicenceId" caption="Tipo" width={120}>
                     <Lookup dataSource ={createStore({name: 'TypeLicence'})} valueExpr="id" displayExpr="name" ></Lookup>
                 </Column>
-                <Column dataField="categories" caption="Categorias" width={90} allowFiltering={false}/>
-                <Column dataField="startDate" caption="Inicio" dataType='date' format={formatDate} width={100} />   
+                <Column dataField="categories" caption="Categorias" width={90} allowFiltering={false} alignment="right"/>
+                <Column dataField="startDate" caption="Inicio" dataType='date' format={formatDate} width={100} alignment="right"/>   
                 <Column dataField="total" width={90} cellRender={cellRenderBold()}/>
                 <Column dataField="subTotal" visible={false} width={80} cellRender={cellRenderBold()}/>
                 <Column dataField="discount" visible={false} width={80} cellRender={cellRenderBold()}/>
                 <Column dataField="abonos" caption="Pagado" width={90} cellRender={cellRenderBold()} allowFiltering={false}/>
-                <Column dataField="payoff" width={90} caption='Pagada' dataType="boolean" cellRender={cellAsPayoff}/>
+                <Column dataField="payoff" width={90} caption='Pagada' dataType="boolean" cellRender={cellAsPayoff} alignment="right"/>
 
                 <Column dataField="instructorId" caption="Instructor" width={150}>
                     <Lookup dataSource ={createStore({name: 'Instructor'})} valueExpr="id" displayExpr="name" ></Lookup>
