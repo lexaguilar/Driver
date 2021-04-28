@@ -9,6 +9,7 @@ import calificationReducer from './calification';
 import cancelRegisterReducer from './cancelRegister';
 import detailsReducer from './details';
 import receiptReducer from './receipt';
+import certificateReducer from './certificate';
 
 
 export default combineReducers({
@@ -20,4 +21,5 @@ export default combineReducers({
     cancelRegister: cancelRegisterReducer,
     details: detailsReducer,
     receipt: receiptReducer,
+    certificate: certificateReducer,
 });

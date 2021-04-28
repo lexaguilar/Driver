@@ -12,6 +12,7 @@ import { calificationDialog } from '../../store/calification/calificationReducer
 import { cancelRegisterDialog } from '../../store/cancelRegister/cancelRegisterReducer';
 import { detailsDialog } from '../../store/details/detailsReducer';
 import { receiptDialog } from '../../store/receipt/receiptReducer';
+import { certificateDialog } from '../../store/certificate/certificateReducer';
 import { cellRenderBold, copyText } from '../../utils/common';
 import { createStore } from '../../utils/proxy';
 import urlReport from '../../services/reportServices';
@@ -23,6 +24,7 @@ import DialogCancel from './DialogCancel';
 import Details from './Details';
 import Recibo from './Recibo';
 import { Label } from 'devextreme-react/form';
+import Certificate from './Certificate';
 
 const Registers = () => {
 
@@ -54,6 +56,7 @@ const Registers = () => {
     const openDialogCancelRegister = id => dispatch(cancelRegisterDialog({ open: true, id }));
     const openDialogDetails = id => dispatch(detailsDialog({ open: true, id }));
     const openDialogReceipt = id => dispatch(receiptDialog({ open: true, id }));
+    const openDialogCertificate = id => dispatch(certificateDialog({ open: true, id }));
 
     const addMenuItems = (e) => {
 
@@ -81,6 +84,10 @@ const Registers = () => {
                     report.print(`${report.certificate(e.row.data.id)}`);
 
                 }
+            // }, {
+            //     text: `Imprimir certificado 2`,
+            //     icon: 'doc',
+            //     onItemClick: () => openDialogCertificate(e.row.data.id)
             }, {
                 text: `Anular matricula`,
                 icon: 'remove',
@@ -146,6 +153,7 @@ const Registers = () => {
             <DialogCancel onCancel={load} />
             <Recibo onSave={load} />
             <Details />
+            <Certificate />
 
             <DataGrid id="gridContainer"
                 ref={dataGrid}
