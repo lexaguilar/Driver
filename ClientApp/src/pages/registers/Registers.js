@@ -11,7 +11,7 @@ import { registerDialog } from '../../store/register/registerReducer';
 import { calificationDialog } from '../../store/calification/calificationReducer';
 import { cancelRegisterDialog } from '../../store/cancelRegister/cancelRegisterReducer';
 import { detailsDialog } from '../../store/details/detailsReducer';
-import { receiptDialog  } from '../../store/receipt/receiptReducer';
+import { receiptDialog } from '../../store/receipt/receiptReducer';
 import { cellRenderBold, copyText } from '../../utils/common';
 import { createStore } from '../../utils/proxy';
 import urlReport from '../../services/reportServices';
@@ -29,66 +29,66 @@ const Registers = () => {
     const dispatch = useDispatch();
     const [viewComplete, setViewComplete] = useState(true);
 
-    const { authorized } = useAuthorization([resources.matriculas, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.matriculas, dataAccess.access]);
 
     let dataGrid = useRef();
 
-    const onToolbarPreparing = (e) => {  
+    const onToolbarPreparing = (e) => {
         e.toolbarOptions.items.unshift({
             location: 'before',
             widget: 'dxButton',
             options: {
                 text: 'Nueva matricula',
-                icon:'plus',
-                type:'default',
-                stylingMode:"outlined",
-                onClick: () =>  openDialog(0)
+                icon: 'plus',
+                type: 'default',
+                stylingMode: "outlined",
+                onClick: () => openDialog(0)
             },
         });
-    }  
+    }
 
     const load = () => dataGrid.current.instance.refresh();
 
-    const openDialog = id => dispatch(registerDialog({ open: true, id}));
-    const openDialogCalification = id => dispatch(calificationDialog({ open: true, id}));
-    const openDialogCancelRegister = id => dispatch(cancelRegisterDialog({ open: true, id}));
-    const openDialogDetails = id => dispatch(detailsDialog({ open: true, id}));
-    const openDialogReceipt = id => dispatch(receiptDialog({ open: true, id}));
+    const openDialog = id => dispatch(registerDialog({ open: true, id }));
+    const openDialogCalification = id => dispatch(calificationDialog({ open: true, id }));
+    const openDialogCancelRegister = id => dispatch(cancelRegisterDialog({ open: true, id }));
+    const openDialogDetails = id => dispatch(detailsDialog({ open: true, id }));
+    const openDialogReceipt = id => dispatch(receiptDialog({ open: true, id }));
 
     const addMenuItems = (e) => {
 
         if (e.target == "content") {
             if (!e.items) e.items = [];
- 
+
             e.items.push({
                 text: `Registrar notas`,
-                icon :  'edit',
+                icon: 'edit',
                 onItemClick: () => openDialogCalification(e.row.data.id)
-            },{
+            }, {
                 text: `Detalles`,
-                icon :  'bulletlist',
+                icon: 'bulletlist',
                 onItemClick: () => openDialogDetails(e.row.data.id)
-            },{
+            }, {
                 text: `Generar recibo de pago`,
-                icon :  'money',
+                icon: 'money',
                 onItemClick: () => openDialogReceipt(e.row.data.id)
-            },{
+            }, {
                 text: `Imprimir certificado`,
-                icon :  'doc',
-                onItemClick: () => {                    
+                icon: 'doc',
+                onItemClick: () => {
 
                     const report = urlReport();
-                    report.print(`${report.certificate(e.row.data.id)}`);   
+                    report.print(`${report.certificate(e.row.data.id)}`);
 
                 }
-            },{
+            }, {
                 text: `Anular matricula`,
-                icon :  'remove',
-                onItemClick: () => openDialogCancelRegister(e.row.data.id)          
-            },{
+                icon: 'remove',
+                onItemClick: () => openDialogCancelRegister(e.row.data.id)
+            }, {
                 text: `Copiar`,
-                icon :  'unselectall',
-                onItemClick: () => copyText(e.row.values[e.columnIndex]) 
+                icon: 'unselectall',
+                onItemClick: () => copyText(e.row.values[e.columnIndex])
             });
         }
     }
@@ -96,59 +96,61 @@ const Registers = () => {
     const onCellPrepared = e => {
 
         const cellsQuantity = ['payoff']
-            
+
         if (e.rowType == 'data') {
-            if(cellsQuantity.includes(e.column.dataField))
-                if(e.row.data.payoff)
+            if (cellsQuantity.includes(e.column.dataField))
+                if (e.row.data.payoff)
                     e.cellElement.classList.add('pagada');
-                else           
-                    e.cellElement.classList.add('pendiente');  
-                    
-            if(e.column.dataField == 'id')
-                e.cellElement.classList.add('col-id');  
+                else
+                    e.cellElement.classList.add('pendiente');
+
+            if (e.column.dataField == 'id')
+                e.cellElement.classList.add('col-id');
         }
-    
+
     }
 
     const onRowPrepared = (e) => {
         if (e.rowType == 'data') {
 
-            if (!e.data.active) 
+            if (!e.data.active)
                 e.rowElement.classList.add('no-activo');
-            
+
         }
     }
 
-    const cellAsPayoff = data => <b>{data.value ? 'Pagada' : 'Pendiente'}</b>;    
+    const cellAsPayoff = data => <b>{data.value ? 'Pagada' : 'Pendiente'}</b>;
 
-    const extraParameter = viewComplete > 0 ? { key : 'active', value : viewComplete } : null;
+    const extraParameter = viewComplete > 0 ? { key: 'active', value: viewComplete } : null;
 
     const title = 'Matriculas';
-    
+
     return authorized(
         <div className="container">
-            <Title title={title}/>
+            <Title title={title} />
             <BlockHeader title={title}>
-                <Label text={"Hola"}></Label>
-                <Switch defaultValue={true} 
+                <div>
+                    <span >Mostrar solo registros activos?: </span>
+                    <Switch defaultValue={true}
                         switchedOffText="NO"
                         switchedOnText="SI"
-                        onValueChange={value =>{
+                        onValueChange={value => {
                             setViewComplete(value)
-                    }} 
-                />
-            </BlockHeader>   
-              
-            <Nuevo onSave={load}/>     
-            <Calification onSave={load}/>     
-            <DialogCancel onCancel={load} />  
-            <Recibo onSave={load} />  
-            <Details/>
+                        }}
+                    />
+                </div>
+            </BlockHeader>
+
+            <Nuevo onSave={load} />
+            <Calification onSave={load} />
+            <DialogCancel onCancel={load} />
+            <Recibo onSave={load} />
+            <Details />
 
             <DataGrid id="gridContainer"
                 ref={dataGrid}
                 selection={{ mode: 'single' }}
-                dataSource={store({uri : uri.registers, remoteOperations : true, extraParameter})}
+                dataSource={store({ uri: uri.registers, remoteOperations: true, extraParameter })}
                 showBorders={true}
                 showRowLines={true}
                 allowColumnResizing={true}
@@ -174,31 +176,31 @@ const Registers = () => {
                 <ColumnChooser enabled={true} />
                 <FilterRow visible={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                <Column dataField="id" caption="Codigo #"  width={80}/>
+                <Column dataField="id" caption="Codigo #" width={80} />
                 <Column dataField="areaId" caption="Sucursal" width={100}>
-                    <Lookup dataSource ={createStore({name: 'Area'})} valueExpr="id" displayExpr="name" ></Lookup>
+                    <Lookup dataSource={createStore({ name: 'Area' })} valueExpr="id" displayExpr="name" ></Lookup>
                 </Column>
                 <Column dataField="identification" width={140} caption="Identificacion" />
                 <Column dataField="name" caption="Nombre completo" />
                 <Column dataField="phoneNumber" width={90} caption="Telefono" allowFiltering={false} />
                 <Column dataField="typeLicenceId" caption="Tipo" width={120}>
-                    <Lookup dataSource ={createStore({name: 'TypeLicence'})} valueExpr="id" displayExpr="name" ></Lookup>
+                    <Lookup dataSource={createStore({ name: 'TypeLicence' })} valueExpr="id" displayExpr="name" ></Lookup>
                 </Column>
-                <Column dataField="categories" caption="Categorias" width={90} allowFiltering={false} alignment="right"/>
-                <Column dataField="startDate" caption="Inicio" dataType='date' format={formatDate} width={100} alignment="right"/>   
-                <Column dataField="total" width={90} cellRender={cellRenderBold()}/>
-                <Column dataField="subTotal" visible={false} width={80} cellRender={cellRenderBold()}/>
-                <Column dataField="discount" visible={false} width={80} cellRender={cellRenderBold()}/>
-                <Column dataField="abonos" caption="Pagado" width={90} cellRender={cellRenderBold()} allowFiltering={false}/>
-                <Column dataField="payoff" width={90} caption='Pagada' dataType="boolean" cellRender={cellAsPayoff} alignment="right"/>
+                <Column dataField="categories" caption="Categorias" width={90} allowFiltering={false} alignment="right" />
+                <Column dataField="startDate" caption="Inicio" dataType='date' format={formatDate} width={100} alignment="right" />
+                <Column dataField="total" width={90} cellRender={cellRenderBold()} />
+                <Column dataField="subTotal" visible={false} width={80} cellRender={cellRenderBold()} />
+                <Column dataField="discount" visible={false} width={80} cellRender={cellRenderBold()} />
+                <Column dataField="abonos" caption="Pagado" width={90} cellRender={cellRenderBold()} allowFiltering={false} />
+                <Column dataField="payoff" width={90} caption='Pagada' dataType="boolean" cellRender={cellAsPayoff} alignment="right" />
 
                 <Column dataField="instructorId" caption="Instructor" width={150}>
-                    <Lookup dataSource ={createStore({name: 'Instructor'})} valueExpr="id" displayExpr="name" ></Lookup>
+                    <Lookup dataSource={createStore({ name: 'Instructor' })} valueExpr="id" displayExpr="name" ></Lookup>
                 </Column>
                 <Column dataField="createBy" caption='Creado por' width={100} />
-                <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={180}/>
+                <Column dataField="createAt" caption='Creado el' dataType='date' format={formatDateTime} width={180} />
                 <Column dataField="modifyBy" caption='Modificado por' width={100} />
-                <Column dataField="modifyAt" caption='Modificado el' dataType='date'  format={formatDateTime} width={180}/>
+                <Column dataField="modifyAt" caption='Modificado el' dataType='date' format={formatDateTime} width={180} />
                 {/* <Column type="buttons" width={50}>
                     <ButtonGrid name="modificar"icon="edit" onClick={e => openDialog(e.row.data.id)}/>
                 </Column> */}

@@ -79,10 +79,10 @@ const Resources = props => {
                             </Form>
                         </Editing>
                         <Column dataField="name" caption="Recurso" allowEditing={false} />
-                        <Column dataField="canRead" caption="Leer" allowFiltering={false} width={160} />
+                        <Column dataField="canRead" caption="Ver listado" allowFiltering={false} width={160} />
                         <Column dataField="canCreate" caption="Crear" allowFiltering={false} width={160} />
-                        <Column dataField="canUpdate" caption="Actualizar" allowFiltering={false} width={160} />
-                        <Column dataField="canDelete" caption="Borrar" allowFiltering={false} width={160} />
+                        <Column dataField="canUpdate" caption="Editar" allowFiltering={false} width={160} />
+                        <Column dataField="canDelete" caption="Anular o borrar" allowFiltering={false} width={160} />
                     </DataGrid>
                 </Item>
 
