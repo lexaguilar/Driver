@@ -128,7 +128,7 @@ const Registers = () => {
         <div className="container">
             <Title title={title}/>
             <BlockHeader title={title}>
-                <Switch defaultValue={false} 
+                <Switch defaultValue={true} 
                         switchedOffText="NO"
                         switchedOnText="SI"
                         onValueChange={value =>{
