@@ -58,13 +58,13 @@ namespace Driver.Controllers
             if (values.ContainsKey("name"))
             {
                 var name = Convert.ToString(values["name"]);
-                registers = registers.Where(x => x.Name.Contains(name));
+                registers = registers.Where(x => x.Name.StartsWith(name));
             }
 
             if (values.ContainsKey("identification"))
             {
                 var identification = Convert.ToString(values["identification"]);
-                registers = registers.Where(x => x.Identification.Contains(identification));
+                registers = registers.Where(x => x.Identification.StartsWith(identification));
             }
 
             if (values.ContainsKey("areaId"))
