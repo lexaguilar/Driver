@@ -27,7 +27,7 @@ function MobileMenu(props) {
         closeMobileMenu();
         //if (item.data) {
             //if (item.data.type === 'language') {
-                closeMobileMenu();
+              //  closeMobileMenu();
            // }
             // if (item.data.type === 'currency') {
             //     const currency = currencies.find((x) => x.currency.code === item.data.code);

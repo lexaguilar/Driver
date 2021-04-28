@@ -1,6 +1,6 @@
-import { DataGrid } from 'devextreme-react';
+import { DataGrid, Switch } from 'devextreme-react';
 import { Column, Editing, Export, FilterRow, Lookup, Pager, Paging, Button as ButtonGrid, ColumnChooser } from 'devextreme-react/data-grid';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
@@ -26,6 +26,7 @@ import Recibo from './Recibo';
 const Registers = () => {
 
     const dispatch = useDispatch();
+    const [viewComplete, setViewComplete] = useState(false);
 
     const { authorized } = useAuthorization([resources.matriculas, dataAccess.access ]);
 
@@ -41,7 +42,7 @@ const Registers = () => {
                 type:'default',
                 stylingMode:"outlined",
                 onClick: () =>  openDialog(0)
-            }
+            },
         });
     }  
 
@@ -59,10 +60,6 @@ const Registers = () => {
             if (!e.items) e.items = [];
  
             e.items.push({
-                text: `Nueva matricula`,
-                icon :  'plus',
-                onItemClick: () => openDialog(0)
-            },{
                 text: `Registrar notas`,
                 icon :  'edit',
                 onItemClick: () => openDialogCalification(e.row.data.id)
@@ -123,12 +120,22 @@ const Registers = () => {
 
     const cellAsPayoff = data => <b>{data.value ? 'Pagada' : 'Pendiente'}</b>;    
 
+    const extraParameter = viewComplete > 0 ? { key : 'active', value : viewComplete } : null;
+
     const title = 'Matriculas';
     
     return authorized(
         <div className="container">
             <Title title={title}/>
-            <BlockHeader title={title}/>   
+            <BlockHeader title={title}>
+                <Switch defaultValue={false} 
+                        switchedOffText="NO"
+                        switchedOnText="SI"
+                        onValueChange={value =>{
+                            setViewComplete(value)
+                    }} 
+                />
+            </BlockHeader>   
               
             <Nuevo onSave={load}/>     
             <Calification onSave={load}/>     
@@ -139,7 +146,7 @@ const Registers = () => {
             <DataGrid id="gridContainer"
                 ref={dataGrid}
                 selection={{ mode: 'single' }}
-                dataSource={store({uri : uri.registers, remoteOperations : true})}
+                dataSource={store({uri : uri.registers, remoteOperations : true, extraParameter})}
                 showBorders={true}
                 showRowLines={true}
                 allowColumnResizing={true}

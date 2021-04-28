@@ -42,6 +42,13 @@ namespace Driver.Controllers
 
             IQueryable<VwRegister> registers = _db.VwRegisters.OrderByDescending(x => x.Id);
 
+            if (values.ContainsKey("active"))
+            {
+                var active = Convert.ToBoolean(values["active"]);
+                if(active)
+                    registers = registers.Where(x => x.Active);
+            }
+
             if (values.ContainsKey("id"))
             {
                 var id = Convert.ToInt32(values["id"]);

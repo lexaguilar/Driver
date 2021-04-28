@@ -146,48 +146,48 @@ const Calification = props => {
                         <SimpleItem dataField="endDate" colSpan={3} editorType="dxDateBox"
                             editorOptions={{ displayFormat: formatDate, openOnFieldClick: true }}>
                             <Label text="Fecha Fin" />
-                            <RequiredRule message="Seleccione la fecha de inicio" />
+                            {/* <RequiredRule message="Seleccione la fecha de inicio" /> */}
                         </SimpleItem>
                         <EmptyItem colSpan={3} />
                         <SimpleItem dataField="noteTheoretical" colSpan={3} editorType="dxNumberBox"
                             editorOptions={{ ...editorOptionsNumberBox }}>
                             <Label text="Nota teórica" />
-                            <RequiredRule message="Complete este campo" />
+                            {/* <RequiredRule message="Complete este campo" /> */}
                         </SimpleItem>
                         <SimpleItem dataField="notePractice" colSpan={3} editorType="dxNumberBox"
                             editorOptions={{ ...editorOptionsNumberBox }}>
                             <Label text="Nota práctica" />
-                            <RequiredRule message="Complete este campo" />
+                            {/* <RequiredRule message="Complete este campo" /> */}
                         </SimpleItem>
                         <SimpleItem dataField="acta" colSpan={3} editorType="dxNumberBox"
                             editorOptions={{ ...editorOptionsNumberBox }}>
                             <Label text="Acta" />
-                            <RequiredRule message="Complete este campo" />
+                            {/* <RequiredRule message="Complete este campo" /> */}
                         </SimpleItem>
                         <SimpleItem dataField="folio" colSpan={3} editorType="dxNumberBox"
                             editorOptions={{ ...editorOptionsNumberBox }}>
                             <Label text="Folio" />
-                            <RequiredRule message="Complete este campo" />
+                            {/* <RequiredRule message="Complete este campo" /> */}
                         </SimpleItem>
                         <SimpleItem dataField="book" colSpan={3} editorType="dxNumberBox"
                             editorOptions={{ ...editorOptionsNumberBox }}>
                             <Label text="Libro" />
-                            <RequiredRule message="Complete este campo" />
+                            {/* <RequiredRule message="Complete este campo" /> */}
                         </SimpleItem>
                         <SimpleItem dataField="actaYear" colSpan={3} editorType="dxNumberBox"
                             editorOptions={{ ...editorOptionsNumberBox }}>
                             <Label text="Año" />
-                            <RequiredRule message="Complete este campo" />
+                            {/* <RequiredRule message="Complete este campo" /> */}
                         </SimpleItem>
                         <SimpleItem dataField="dateTheoretical" colSpan={3} editorType="dxDateBox"
                             editorOptions={{ displayFormat: formatDate, openOnFieldClick: true }}>
                             <Label text="Examen teórico" />
-                            <RequiredRule message="Seleccione la fecha del examen" />
+                            {/* <RequiredRule message="Seleccione la fecha del examen" /> */}
                         </SimpleItem>
                         <SimpleItem dataField="datePractice" colSpan={3} editorType="dxDateBox"
                             editorOptions={{ displayFormat: formatDate, openOnFieldClick: true }}>
                             <Label text="Examen práctico" />
-                            <RequiredRule message="Seleccione la fecha del examen" />
+                            {/* <RequiredRule message="Seleccione la fecha del examen" /> */}
                         </SimpleItem>
                         <SimpleItem dataField="applyPay" colSpan={3} editorType="dxSwitch"
                             editorOptions={{ ...editorOptionsSwitch }}>

@@ -57,7 +57,7 @@ namespace Driver.Controllers
                     fields.SetField("StartDate", register.StartDate.ToString("dd-MM-yy"));
                     fields.SetField("EndDate", register.EndDate?.ToString("dd-MM-yy"));
 
-                    fields.SetField("NoteTheoretical",  register.NotePractice?.ToString());
+                    fields.SetField("NoteTheoretical",  register.NoteTheoretical?.ToString());
                     fields.SetField("NotePractice", register.NotePractice?.ToString());
 
                     fields.SetField("Acta",  register.Acta);

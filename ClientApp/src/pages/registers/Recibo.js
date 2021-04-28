@@ -107,14 +107,14 @@ const Recibo = props => {
         <div>
             <Popup
                 width={650}
-                height={680}
+                height={600}
                 title={`Registrar recibo para la matricula #${id}`}
                 onHiding={onHiding}
                 visible={open}
                 className="bg-fbfbfb"
             >
                 <Form formData={dataClient} readOnly={true}>
-                    <GroupItem colCount={6} caption="Datos de la matricula">
+                    <GroupItem colCount={6}>
                         <SimpleItem dataField="client.name" colSpan={6} >
                             <Label text="Nombre" />
                         </SimpleItem>

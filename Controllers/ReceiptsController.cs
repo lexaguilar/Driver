@@ -114,6 +114,8 @@ namespace Driver.Controllers
             receipt.CreateAt = DateTime.Now;
             receipt.CreateBy = user.Username;
 
+            register.Payoff = balance == 0;
+
             _db.Receipts.Add(receipt);
 
             
