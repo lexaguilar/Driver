@@ -84,10 +84,6 @@ const Registers = () => {
                     report.print(`${report.certificate(e.row.data.id)}`);
 
                 }
-            // }, {
-            //     text: `Imprimir certificado 2`,
-            //     icon: 'doc',
-            //     onItemClick: () => openDialogCertificate(e.row.data.id)
             }, {
                 text: `Anular matricula`,
                 icon: 'remove',
@@ -181,42 +177,35 @@ const Registers = () => {
                     showPageSizeSelector={true}
                     allowedPageSizes={[10, 20, 50]}
                 />
-                <ColumnChooser enabled={true} />
+                <ColumnChooser enabled={true} mode="select"/>
                 <FilterRow visible={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                <Column dataField="id" caption="Codigo #" width={80} />
-                <Column dataField="areaId" caption="Sucursal" width={100}>
+                <Column dataField="id" caption="Codigo #" width={80} hidingPriority={7} />
+                <Column dataField="areaId" hidingPriority={6} caption="Sucursal" width={100} >
                     <Lookup dataSource={createStore({ name: 'Area' })} valueExpr="id" displayExpr="name" ></Lookup>
                 </Column>
                 <Column dataField="identification" width={140} caption="Identificacion" />
                 <Column dataField="name" caption="Nombre completo" />
-                <Column dataField="phoneNumber" width={90} caption="Telefono" allowFiltering={false} />
+                <Column dataField="phoneNumber" hidingPriority={5} width={90} caption="Telefono" allowFiltering={false} />
                 <Column dataField="typeLicenceId" caption="Tipo" width={120}>
                     <Lookup dataSource={createStore({ name: 'TypeLicence' })} valueExpr="id" displayExpr="name" ></Lookup>
                 </Column>
                 <Column dataField="categories" caption="Categorias" width={90} allowFiltering={false} alignment="right" />
                 <Column dataField="startDate" caption="Inicio" dataType='date' format={formatDate} width={100} alignment="right" />
                 <Column dataField="total" width={90} cellRender={cellRenderBold()} />
-                <Column dataField="subTotal" visible={false} width={80} cellRender={cellRenderBold()} />
-                <Column dataField="discount" visible={false} width={80} cellRender={cellRenderBold()} />
+                {/* <Column dataField="subTotal" visible={false} width={80} cellRender={cellRenderBold()} />
+                <Column dataField="discount" visible={false} width={80} cellRender={cellRenderBold()} /> */}
                 <Column dataField="abonos" caption="Pagado" width={90} cellRender={cellRenderBold()} allowFiltering={false} />
                 <Column dataField="payoff" width={90} caption='Pagada' dataType="boolean" cellRender={cellAsPayoff} alignment="right" />
 
-                <Column dataField="instructorId" caption="Instructor" width={150}>
+                <Column dataField="instructorId" hidingPriority={4} caption="Instructor" width={150}>
                     <Lookup dataSource={createStore({ name: 'Instructor' })} valueExpr="id" displayExpr="name" ></Lookup>
                 </Column>
-                <Column dataField="createBy" caption='Creado por' width={100} />
-                <Column dataField="createAt" caption='Creado el' dataType='date' format={formatDateTime} width={180} />
-                <Column dataField="modifyBy" caption='Modificado por' width={100} />
-                <Column dataField="modifyAt" caption='Modificado el' dataType='date' format={formatDateTime} width={180} />
-                {/* <Column type="buttons" width={50}>
-                    <ButtonGrid name="modificar"icon="edit" onClick={e => openDialog(e.row.data.id)}/>
-                </Column> */}
-                {/* <Editing                   
-                    allowUpdating={true}
-                    useIcons={true}
-                >                    
-                </Editing> */}
+                <Column dataField="createBy" hidingPriority={3} caption='Creado por' width={100} />
+                <Column dataField="createAt" hidingPriority={2} caption='Creado el' dataType='date' format={formatDateTime} width={180} />
+                <Column dataField="modifyBy" hidingPriority={1} caption='Modificado por' width={100} />
+                <Column dataField="modifyAt" hidingPriority={0} caption='Modificado el' dataType='date' format={formatDateTime} width={180} /> 
+             
             </DataGrid>
         </div>
     );

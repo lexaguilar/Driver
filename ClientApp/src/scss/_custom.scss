@@ -417,3 +417,48 @@
         font-weight: bold;
         color: rgb(17, 77, 155);
     }
+    
+    #box {
+        position: relative;
+        margin: 30px;
+        width: 200px;
+        height: 100px;
+        background: #ccc;
+        border: 1px solid #333;
+    }
+    
+    .corner {
+        position: absolute;
+        height: 10px;
+        width: 10px;
+        border: 1px solid #333;
+        background-color: #fff;
+    }
+    
+    .top-left {
+        top: -1px;
+        left: -1px;
+        border-radius: 0 0 100% 0;
+        border-width: 0 1px 1px 0;
+    }
+    
+    .top-right {
+        top: -1px;
+        left: 190px;
+        border-radius: 0 0 0 100%;
+        border-width: 0 0 1px 1px;
+    }
+    
+    .bottom-left {
+        top: 90px;
+        left: -1px;
+        border-radius: 0 100% 0 0;
+        border-width: 1px 1px 0 0;
+    }
+    
+    .bottom-right {
+        top: 90px;
+        left: 190px;
+        border-radius: 100% 0 0 0;
+        border-width: 1px 0 0 1px;
+    }

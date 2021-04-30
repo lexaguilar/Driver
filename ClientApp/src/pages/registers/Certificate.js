@@ -23,12 +23,19 @@ const Certificate = () => {
             <Popup
                 // width={650}
                 // height={650}
+                showTitle={false}
                 title={`Certificado #${id}`}
                 onHiding={onHiding}
                 visible={open}
                 closeOnOutsideClick={true}
                 className="bg-fbfbfb"
             >
+               <div id="box">
+                    <div class="corner top-left"></div>
+                    <div class="corner top-right"></div>
+                    <div class="corner bottom-left"></div>
+                    <div class="corner bottom-right"></div>
+                </div>
 
             </Popup>
         </div>
