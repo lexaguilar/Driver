@@ -61,9 +61,14 @@ const Clients = () => {
                 hoverStateEnabled={true}
                 onToolbarPreparing={onToolbarPreparing}
                 onContextMenuPreparing={addMenuItems}
+                remoteOperations={{
+                    paging: true,
+                    filtering: true
+                }}
             >
-                <Paging defaultPageSize={20} />
+                <Paging defaultPageSize={10} />
                 <Pager
+                    showInfo={true}
                     showPageSizeSelector={true}
                     allowedPageSizes={[10, 20, 50]}
                 />
