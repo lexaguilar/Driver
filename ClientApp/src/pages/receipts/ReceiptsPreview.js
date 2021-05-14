@@ -48,13 +48,9 @@ const ReceiptsPreview = ({ isPreview = false, registerId = 0 }) => {
             if (!e.items) e.items = [];
  
             e.items.push({
-                text: `Anular matricula`,
-                icon :  'remove',
-               // onItemClick: () => openDialogCancelRegister(e.row.data.id)          
-            },{
                 text: `Copiar`,
                 icon :  'unselectall',
-               // onItemClick: () => copyText(e.row.values[e.columnIndex]) 
+                onItemClick: () => copyText(e.row.values[e.columnIndex]) 
             });
         }
     }

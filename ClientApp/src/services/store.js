@@ -34,6 +34,14 @@ const store =
                 params.skip = loadOptions.skip || 0;
                 params.take = loadOptions.take || 10;
 
+
+                if(model?.extraParameter?.length){
+                    for (let index = 0; index < model.extraParameter.length; index++) {
+                        const element = model.extraParameter[index];
+                        params[element[0]] = element[1];
+                    }
+                }
+
                 if (model.extraParameter)
                     params[model.extraParameter.key] = model.extraParameter.value;
 

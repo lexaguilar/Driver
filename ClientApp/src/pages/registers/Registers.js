@@ -1,7 +1,7 @@
 import { DataGrid, Switch } from 'devextreme-react';
-import { Column, Editing, Export, FilterRow, Lookup, Pager, Paging, Button as ButtonGrid, ColumnChooser } from 'devextreme-react/data-grid';
+import { Column, Export, FilterRow, Lookup, Pager, Paging, ColumnChooser } from 'devextreme-react/data-grid';
 import React, { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
 import { dataAccess, formatDate, formatDateTime, resources } from '../../data/app';
@@ -12,26 +12,25 @@ import { calificationDialog } from '../../store/calification/calificationReducer
 import { cancelRegisterDialog } from '../../store/cancelRegister/cancelRegisterReducer';
 import { detailsDialog } from '../../store/details/detailsReducer';
 import { receiptDialog } from '../../store/receipt/receiptReducer';
-import { certificateDialog } from '../../store/certificate/certificateReducer';
 import { cellRenderBold, copyText } from '../../utils/common';
 import { createStore } from '../../utils/proxy';
 import urlReport from '../../services/reportServices';
 import uri from '../../utils/uri';
 import Nuevo from './Nuevo';
 import Calification from './Calification';
-import http from '../../utils/http';
 import DialogCancel from './DialogCancel';
 import Details from './Details';
 import Recibo from './Recibo';
-import { Label } from 'devextreme-react/form';
 import Certificate from './Certificate';
 
 const Registers = () => {
 
     const dispatch = useDispatch();
     const [viewComplete, setViewComplete] = useState(true);
+    const { user } = useSelector(store => store);
 
     const { authorized } = useAuthorization([resources.matriculas, dataAccess.access]);
+    const { isAuthorization } = useAuthorization([resources.verSucursales, dataAccess.access]);
 
     let dataGrid = useRef();
 
@@ -56,7 +55,6 @@ const Registers = () => {
     const openDialogCancelRegister = id => dispatch(cancelRegisterDialog({ open: true, id }));
     const openDialogDetails = id => dispatch(detailsDialog({ open: true, id }));
     const openDialogReceipt = id => dispatch(receiptDialog({ open: true, id }));
-    const openDialogCertificate = id => dispatch(certificateDialog({ open: true, id }));
 
     const addMenuItems = (e) => {
 
@@ -124,7 +122,23 @@ const Registers = () => {
 
     const cellAsPayoff = data => <b>{data.value ? 'Pagada' : 'Pendiente'}</b>;
 
-    const extraParameter = viewComplete > 0 ? { key: 'active', value: viewComplete } : null;
+   
+
+    const addExtraParameter = () => {
+
+        const extraParameter = [];
+
+        if (viewComplete)
+            extraParameter.push(["active", viewComplete]);
+
+        if (!isAuthorization)
+            extraParameter.push(["areaId", user.areaId]);
+
+        return extraParameter;
+    };
+
+
+    
 
     const title = 'Matriculas';
 
@@ -154,7 +168,7 @@ const Registers = () => {
             <DataGrid id="gridContainer"
                 ref={dataGrid}
                 selection={{ mode: 'single' }}
-                dataSource={store({ uri: uri.registers, remoteOperations: true, extraParameter })}
+                dataSource={store({ uri: uri.registers, remoteOperations: true, extraParameter : addExtraParameter() })}
                 showBorders={true}
                 showRowLines={true}
                 allowColumnResizing={true}
@@ -177,11 +191,11 @@ const Registers = () => {
                     showPageSizeSelector={true}
                     allowedPageSizes={[10, 20, 50]}
                 />
-                <ColumnChooser enabled={true} mode="select"/>
+                <ColumnChooser enabled={true} />
                 <FilterRow visible={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                 <Column dataField="id" caption="Codigo #" width={80} hidingPriority={7} />
-                <Column dataField="areaId" hidingPriority={6} caption="Sucursal" width={100} >
+                <Column dataField="areaId" hidingPriority={6} caption="Sucursal" width={100} allowFiltering={isAuthorization} >
                     <Lookup dataSource={createStore({ name: 'Area' })} valueExpr="id" displayExpr="name" ></Lookup>
                 </Column>
                 <Column dataField="identification" width={140} caption="Identificacion" />
@@ -204,8 +218,8 @@ const Registers = () => {
                 <Column dataField="createBy" hidingPriority={3} caption='Creado por' width={100} />
                 <Column dataField="createAt" hidingPriority={2} caption='Creado el' dataType='date' format={formatDateTime} width={180} />
                 <Column dataField="modifyBy" hidingPriority={1} caption='Modificado por' width={100} />
-                <Column dataField="modifyAt" hidingPriority={0} caption='Modificado el' dataType='date' format={formatDateTime} width={180} /> 
-             
+                <Column dataField="modifyAt" hidingPriority={0} caption='Modificado el' dataType='date' format={formatDateTime} width={180} />
+
             </DataGrid>
         </div>
     );

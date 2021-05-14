@@ -20,7 +20,7 @@ function Topbar(props) {
 
     const accountLinks = [
         { title: 'Precio', url: '/driver/app' },
-        { title: 'Password', url: '/account/password' },
+        { title: 'Constraseña', url: '/account/password' },
         { title: 'Salir', url: '/account/logout' },
     ];
 

@@ -31,10 +31,10 @@ const Certificate = () => {
                 className="bg-fbfbfb"
             >
                <div id="box">
-                    <div class="corner top-left"></div>
-                    <div class="corner top-right"></div>
-                    <div class="corner bottom-left"></div>
-                    <div class="corner bottom-right"></div>
+                    <div className="corner top-left"></div>
+                    <div className="corner top-right"></div>
+                    <div className="corner bottom-left"></div>
+                    <div className="corner bottom-right"></div>
                 </div>
 
             </Popup>
