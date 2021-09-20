@@ -24,6 +24,7 @@ namespace Driver.Models
         public string CreateBy { get; set; }
         public DateTime ModifyAt { get; set; }
         public string ModifyBy { get; set; }
+        public int? Age { get; set; }
 
         public virtual ICollection<Receipt> Receipts { get; set; }
         public virtual ICollection<Register> Registers { get; set; }

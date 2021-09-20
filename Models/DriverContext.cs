@@ -394,6 +394,10 @@ namespace Driver.Models
 
                 entity.Property(e => e.Balance).HasColumnType("money");
 
+                entity.Property(e => e.Book)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Categories)
                     .HasMaxLength(10)
                     .IsUnicode(false);
@@ -406,6 +410,12 @@ namespace Driver.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Discount).HasColumnType("money");
+
+                entity.Property(e => e.EndDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Folio)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Identification)
                     .IsRequired()

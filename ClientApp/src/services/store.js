@@ -31,74 +31,71 @@ const store =
             load: (loadOptions) => {
 
                 let params = {};
-                params.skip = loadOptions.skip || 0;
-                params.take = loadOptions.take || 10;
 
+                if(loadOptions.isLoadingAll){
 
-                if(model?.extraParameter?.length){
-                    for (let index = 0; index < model.extraParameter.length; index++) {
-                        const element = model.extraParameter[index];
-                        params[element[0]] = element[1];
+                    let paramsTemp = JSON.parse(localStorage.getItem("params"));
+                    if(paramsTemp)
+                        params = paramsTemp;
+
+                }else{
+                    
+                    params.skip = loadOptions.skip || 0;
+                    params.take = loadOptions.take || 10;
+
+                    if(model?.extraParameter?.length){
+                        for (let index = 0; index < model.extraParameter.length; index++) {
+                            const element = model.extraParameter[index];
+                            params[element[0]] = element[1];
+                        }
                     }
-                }
-
-                if (model.extraParameter)
-                    params[model.extraParameter.key] = model.extraParameter.value;
-
-                if (loadOptions.filter) {
-                    if (typeof loadOptions.filter[0] == 'object') {
-
-                        let moreParams = {};
-
-                        const dataFilter = filters =>{
-                            
-                            for (var filter in filters) {
-                                if (filters.hasOwnProperty(filter)) {
-
-                                    if(['columnIndex','filterValue'].includes(filter)) continue;
-
-                                    const element = filters[filter]
-                                    
-                                    if(['!=','==','<','>','<=','>=','and','or'].includes(element)) continue;
-                                    
-                                    if (typeof element == 'object') {
-                                        dataFilter(element);
-                                    }else{
-                                        if(moreParams[filters[0]])
-                                        moreParams[`${filters[0]}End` ] = filters[2];
-                                        else
-                                        moreParams[filters[0]] = filters[2];
-                                        break;
+    
+                    if (model.extraParameter)
+                        params[model.extraParameter.key] = model.extraParameter.value;
+    
+                    if (loadOptions.filter) {
+                        if (typeof loadOptions.filter[0] == 'object') {
+    
+                            let moreParams = {};
+    
+                            const dataFilter = filters =>{
+                                
+                                for (var filter in filters) {
+                                    if (filters.hasOwnProperty(filter)) {
+    
+                                        if(['columnIndex','filterValue'].includes(filter)) continue;
+    
+                                        const element = filters[filter]
+                                        
+                                        if(['!=','==','<','>','<=','>=','and','or'].includes(element)) continue;
+                                        
+                                        if (typeof element == 'object') {
+                                            dataFilter(element);
+                                        }else{
+                                            if(moreParams[filters[0]])
+                                            moreParams[`${filters[0]}End` ] = filters[2];
+                                            else
+                                            moreParams[filters[0]] = filters[2];
+                                            break;
+                                        }
                                     }
                                 }
-                            }
+    
+                            };
+    
+                            dataFilter(loadOptions.filter);
+                            
+                            params = { ...params, ...moreParams}
 
-                        };
-
-                        dataFilter(loadOptions.filter);
-                        
-                        params = { ...params, ...moreParams}
-
-                        // for (var filter in loadOptions.filter) {
-                        //     if (loadOptions.filter.hasOwnProperty(filter)) {
-                        //         const element = loadOptions.filter[filter];
-                        //         if (typeof element == 'object') {
-                        //             if (typeof element[0] == 'object') {
-                        //                 var t = element[0];
-                        //                 if (!params[t[0]])
-                        //                     params[t[0]] = t[2];
-                        //             } else {
-                        //                 if (!params[element[0]])
-                        //                     params[element[0]] = element[2];
-                        //             }
-
-                        //         }
-                        //     }
-                        // }
-                    } else {
-                        params[loadOptions.filter[0]] = loadOptions.filter[2];
+                        } else {
+                            params[loadOptions.filter[0]] = loadOptions.filter[2];
+                        }
                     }
+    
+
                 }
+               
+                localStorage.setItem("params", JSON.stringify(params));
 
                 return http(model.uri.get)
                     .asGet(params)

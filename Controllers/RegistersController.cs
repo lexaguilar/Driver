@@ -30,7 +30,7 @@ namespace Driver.Controllers
             .Include(x => x.Receipts)
             .Include(x => x.Instructor)
             .FirstOrDefault(x => x.Id == id);
-            
+
             return Json(register);
 
 
@@ -42,17 +42,39 @@ namespace Driver.Controllers
 
             IQueryable<VwRegister> registers = _db.VwRegisters.OrderByDescending(x => x.Id);
 
-            if (values.ContainsKey("active"))
+             if (values.ContainsKey("active"))
             {
                 var active = Convert.ToBoolean(values["active"]);
-                if(active)
+                if (active)
                     registers = registers.Where(x => x.Active);
-            }
+            }          
 
             if (values.ContainsKey("id"))
             {
                 var id = Convert.ToInt32(values["id"]);
                 registers = registers.Where(x => x.Id == id);
+            }
+
+            if (values.ContainsKey("code"))
+            {
+                var code = Convert.ToInt32(values["code"]);
+                registers = registers.Where(x => x.Code == code);
+            }
+
+            if (values.ContainsKey("age"))
+            {
+                var age = Convert.ToInt32(values["age"]);
+                if (values.ContainsKey("ageEnd"))
+                {
+                    var ageEnd = Convert.ToInt32(values["ageEnd"]);
+                    registers = registers.Where(x => x.Age >= age && x.Age <= ageEnd);
+                }
+                else
+                {
+                    registers = registers.Where(x => x.Age == age);
+
+                }
+
             }
 
             if (values.ContainsKey("name"))
@@ -103,6 +125,17 @@ namespace Driver.Controllers
                 registers = registers.Where(x => x.CreateBy == createBy);
             }
 
+            if (values.ContainsKey("createAt"))
+            {
+                var createAt = Convert.ToDateTime(values["createAt"]);
+                if (values.ContainsKey("createAtEnd"))
+                {
+                    var createAtEnd = Convert.ToDateTime(values["createAtEnd"]);
+                    registers = registers.Where(x => x.CreateAt > createAt && x.CreateAt <= createAtEnd);
+                }
+                else
+                    registers = registers.Where(x => x.CreateAt == createAt);
+            }
 
             var items = registers.Skip(skip).Take(take);
 
@@ -147,7 +180,8 @@ namespace Driver.Controllers
                         Name = register.Name,
                         Identification = register.Identification,
                         SexId = "M",
-                        Address = register.Address,
+                        Address = "",
+                        Age = register.Age,
                         PhoneNumber = register.PhoneNumber,
 
                         ModifyAt = DateTime.Now,
@@ -159,8 +193,14 @@ namespace Driver.Controllers
 
                 client.ToUpperCase();
 
+                var lastCode = 1;
+                var codeRegisters = _db.Registers.Select(x => x.Code);
+                if(codeRegisters.Count() > 0)
+                    lastCode = codeRegisters.Max() + 1; 
+
                 var newRegister = new Register
                 {
+                    Code = lastCode,
                     AreaId = user.AreaId,
                     Client = client,
                     SubTotal = register.SubTotal,
@@ -301,7 +341,7 @@ namespace Driver.Controllers
             var model = _db.Registers.FirstOrDefault(x => x.Id == register.Id);
 
             var user = this.GetAppUser();
-          
+
             model.Observation = register.Observation;
             model.ModifyAt = DateTime.Now;
             model.ModifyBy = user.Username;

@@ -60,7 +60,7 @@ const Details = props => {
             <Popup
                 width={650}
                 height={650}
-                title={`Detalles de la matricula #${id}`}
+                title={`Detalles de la matricula #${dataClient.code}`}
                 onHiding={onHiding}
                 visible={open}
                 closeOnOutsideClick={true}

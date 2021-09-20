@@ -120,9 +120,8 @@ const Nuevo = props => {
                             <Label text="Telefono" />
                             <RequiredRule message="Complete este campo" />
                         </SimpleItem>
-                        <SimpleItem dataField="address" colSpan={6} editorType="dxTextArea">
-                            <Label text="Dirección" />
-                            <StringLengthRule max={250} message="Maximo de carateres permitidos 250" />
+                        <SimpleItem dataField="age" colSpan={3} editorOptions={{ ...editorOptionsNumberBox }} editorType="dxNumberBox">
+                            <Label text="Edad" />
                             <RequiredRule message="Complete este campo" />
                         </SimpleItem>
                     </GroupItem>

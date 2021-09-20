@@ -8,13 +8,20 @@ namespace Driver.Models
     public partial class VwRegister
     {
         public int Id { get; set; }
+        public int Code { get; set; }
         public string Sucursal { get; set; }
         public int AreaId { get; set; }
         public int ClientId { get; set; }
         public string Identification { get; set; }
         public string Name { get; set; }
+        public int? Age { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public double? NotePractice { get; set; }
+        public double? NoteTheoretical { get; set; }
+        public string Folio { get; set; }
+        public string Book { get; set; }
         public int TypeLicenceId { get; set; }
         public decimal Discount { get; set; }
         public decimal SubTotal { get; set; }

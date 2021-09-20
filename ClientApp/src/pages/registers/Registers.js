@@ -1,5 +1,5 @@
 import { DataGrid, Switch } from 'devextreme-react';
-import { Column, Export, FilterRow, Lookup, Pager, Paging, ColumnChooser } from 'devextreme-react/data-grid';
+import { Column, Export, FilterRow, Lookup, Pager, Paging, ColumnChooser, Selection } from 'devextreme-react/data-grid';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BlockHeader from '../../components/shared/BlockHeader';
@@ -105,7 +105,7 @@ const Registers = () => {
                 else
                     e.cellElement.classList.add('pendiente');
 
-            if (e.column.dataField == 'id')
+            if (e.column.dataField == 'code')
                 e.cellElement.classList.add('col-id');
         }
 
@@ -137,8 +137,59 @@ const Registers = () => {
         return extraParameter;
     };
 
+    const onExporting = function(e){  
+        e.component.beginUpdate();  
+        e.component.columnOption("areaId","visible",false);  
+        e.component.columnOption("phoneNumber","visible",false);  
+        e.component.columnOption("typeLicenceId","visible",false);  
+        e.component.columnOption("instructorId","visible",false);  
+        e.component.columnOption("createAt","visible",false);  
+        e.component.columnOption("createBy","visible",false);  
+        e.component.columnOption("modifyAt","visible",false);  
+        e.component.columnOption("modifyBy","visible",false);  
+        e.component.columnOption("identification","visible",false);  
+        e.component.columnOption("total","visible",false);  
+        e.component.columnOption("abonos","visible",false);  
+        e.component.columnOption("payoff","visible",false);  
+        
+        e.component.columnOption("id2","visible",true);  
+        e.component.columnOption("endDate","visible",true);  
+        e.component.columnOption("noteTheoretical","visible",true);  
+        e.component.columnOption("notePractice","visible",true);  
+        e.component.columnOption("folio","visible",true);  
+        e.component.columnOption("book","visible",true);  
 
-    
+        e.component.columnOption("id","caption","Codigo de Ingreso");  
+        e.component.columnOption("startDate","caption","Fecha Inicio");   
+
+    };
+
+    const onExported= function(e){  
+        e.component.columnOption("areaId","visible",true);  
+        e.component.columnOption("phoneNumber","visible",true);  
+        e.component.columnOption("typeLicenceId","visible",true);  
+        e.component.columnOption("instructorId","visible",true);  
+        e.component.columnOption("createAt","visible",true);  
+        e.component.columnOption("createBy","visible",true);  
+        e.component.columnOption("modifyAt","visible",true);  
+        e.component.columnOption("modifyBy","visible",true);  
+        e.component.columnOption("identification","visible",true);  
+        e.component.columnOption("total","visible",true);  
+        e.component.columnOption("abonos","visible",true);  
+        e.component.columnOption("payoff","visible",true);  
+        
+        e.component.columnOption("id2","visible",false);  
+        e.component.columnOption("endDate","visible",false);  
+        e.component.columnOption("noteTheoretical","visible",false);  
+        e.component.columnOption("notePractice","visible",false);  
+        e.component.columnOption("folio","visible",false);  
+        e.component.columnOption("book","visible",false);  
+
+        e.component.columnOption("id","caption","Codigo");  
+        e.component.columnOption("startDate","caption","Inicio");  
+
+        e.component.endUpdate();  
+    };  
 
     const title = 'Matriculas';
 
@@ -180,6 +231,9 @@ const Registers = () => {
                 onToolbarPreparing={onToolbarPreparing}
                 onContextMenuPreparing={addMenuItems}
                 onRowPrepared={onRowPrepared}
+                onExporting={onExporting}
+                onExported={onExported}
+                
                 remoteOperations={{
                     paging: true,
                     filtering: true
@@ -189,36 +243,43 @@ const Registers = () => {
                 <Pager
                     showInfo={true}
                     showPageSizeSelector={true}
-                    allowedPageSizes={[10, 20, 50]}
+                    allowedPageSizes={[10, 20, 50, 100, 500, 1000]}
                 />
                 <ColumnChooser enabled={true} />
                 <FilterRow visible={true} />
-                <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                <Column dataField="id" caption="Codigo #" width={80} hidingPriority={7} />
-                <Column dataField="areaId" hidingPriority={6} caption="Sucursal" width={100} allowFiltering={isAuthorization} >
+                <Export enabled={true} fileName={title} allowExportSelectedData={false}/>
+                <Column visible={false} dataField="id"/>
+                <Column dataField="code" caption="Codigo" width={70} hidingPriority={7} />
+                <Column dataField="id2" caption="Codigo de Egreso" visible={false} />
+                <Column dataField="areaId" hidingPriority={6} caption="Sucursal" width={90} allowFiltering={isAuthorization} >
                     <Lookup dataSource={createStore({ name: 'Area' })} valueExpr="id" displayExpr="name" ></Lookup>
                 </Column>
                 <Column dataField="identification" width={140} caption="Identificacion" />
                 <Column dataField="name" caption="Nombre completo" />
-                <Column dataField="phoneNumber" hidingPriority={5} width={90} caption="Telefono" allowFiltering={false} />
+                <Column dataField="age" caption="Edad" width={65} />
+                <Column dataField="phoneNumber" hidingPriority={4} width={90} caption="Telefono" allowFiltering={false} />
                 <Column dataField="typeLicenceId" caption="Tipo" width={120}>
                     <Lookup dataSource={createStore({ name: 'TypeLicence' })} valueExpr="id" displayExpr="name" ></Lookup>
                 </Column>
                 <Column dataField="categories" caption="Categorias" width={90} allowFiltering={false} alignment="right" />
                 <Column dataField="startDate" caption="Inicio" dataType='date' format={formatDate} width={100} alignment="right" />
                 <Column dataField="total" width={90} cellRender={cellRenderBold()} />
-                {/* <Column dataField="subTotal" visible={false} width={80} cellRender={cellRenderBold()} />
-                <Column dataField="discount" visible={false} width={80} cellRender={cellRenderBold()} /> */}
                 <Column dataField="abonos" caption="Pagado" width={90} cellRender={cellRenderBold()} allowFiltering={false} />
                 <Column dataField="payoff" width={90} caption='Pagada' dataType="boolean" cellRender={cellAsPayoff} alignment="right" />
 
-                <Column dataField="instructorId" hidingPriority={4} caption="Instructor" width={150}>
+                <Column dataField="instructorId" hidingPriority={3} caption="Instructor" width={150}>
                     <Lookup dataSource={createStore({ name: 'Instructor' })} valueExpr="id" displayExpr="name" ></Lookup>
                 </Column>
-                <Column dataField="createBy" hidingPriority={3} caption='Creado por' width={100} />
-                <Column dataField="createAt" hidingPriority={2} caption='Creado el' dataType='date' format={formatDateTime} width={180} />
-                <Column dataField="modifyBy" hidingPriority={1} caption='Modificado por' width={100} />
+                <Column dataField="createAt" hidingPriority={5} caption='Creado el' dataType='date' format={formatDate} width={100} />
+                <Column dataField="createBy" hidingPriority={2} caption='Creado por' width={100} />
                 <Column dataField="modifyAt" hidingPriority={0} caption='Modificado el' dataType='date' format={formatDateTime} width={180} />
+                <Column dataField="modifyBy" hidingPriority={1} caption='Modificado por' width={100} />
+
+                <Column dataField="endDate" caption="Fecha Finalizacion"  dataType='date' visible={false} format={formatDate}/>
+                <Column dataField="noteTheoretical" caption="Nota teorica" visible={false} />
+                <Column dataField="notePractice" caption="Nota practica" visible={false} />
+                <Column dataField="folio" caption="Folio" visible={false} />
+                <Column dataField="book" caption="Libro" visible={false} />
 
             </DataGrid>
         </div>

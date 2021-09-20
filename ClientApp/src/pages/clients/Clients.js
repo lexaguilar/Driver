@@ -78,7 +78,7 @@ const Clients = () => {
                 <Column dataField="name" caption="Nombre completo" />             
                 <Column dataField="phoneNumber" width={110} caption="Telefono" />
                 <Column dataField="celularNumber" width={110} caption="Celular" />
-                <Column dataField="address" caption="Direccion" allowFiltering={false} />
+                <Column dataField="age" caption="Edad" />
 
                 <Editing
                     mode="popup"
@@ -98,8 +98,8 @@ const Clients = () => {
                         </Item>                        
                         <Item  dataField="phoneNumber" editorOptions={{mask: "0000-0000"}} colSpan={2}></Item>  
                         <Item  dataField="celularNumber"  editorOptions={{mask: "0000-0000"}} colSpan={2}></Item>  
-                        <Item  dataField="address"  colSpan={2} editorType="dxTextArea">
-                            <StringLengthRule max={250} message="Maximo de carateres permitidos 250" />
+                        <Item  dataField="age"  colSpan={2} editorType="dxNumberBox">
+                            <RequiredRule message="El campo es requerida"/>
                         </Item>  
                     </Form>
                 </Editing>

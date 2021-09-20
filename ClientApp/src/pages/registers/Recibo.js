@@ -108,7 +108,7 @@ const Recibo = props => {
             <Popup
                 width={650}
                 height={600}
-                title={`Registrar recibo para la matricula #${id}`}
+                title={`Registrar recibo para la matricula #${dataClient.code}`}
                 onHiding={onHiding}
                 visible={open}
                 className="bg-fbfbfb"

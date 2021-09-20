@@ -111,7 +111,7 @@ const Calification = props => {
             <Popup
                 width={600}
                 height={715}
-                title={`Registrar calificaciones de la matricula #${id}`}
+                title={`Registrar calificaciones de la matricula #${dataClient.code}`}
                 onHiding={onHiding}
                 visible={open}
                 className="bg-fbfbfb"

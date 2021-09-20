@@ -39,6 +39,7 @@ namespace Driver.Models
         public string CreateBy { get; set; }
         public DateTime ModifyAt { get; set; }
         public string ModifyBy { get; set; }
+        public int Code { get; set; }
 
         public virtual Area Area { get; set; }
         public virtual Client Client { get; set; }

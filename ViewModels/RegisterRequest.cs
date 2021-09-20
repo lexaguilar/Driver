@@ -9,7 +9,7 @@ namespace Driver.ViewModel
     public class RegisterRequest
     {
         public int Id  { get; set; }
-        public string Address  { get; set; }
+        public int Age  { get; set; }
         public decimal Balance  { get; set; }     
         public decimal Discount  { get; set; }
         public string Identification  { get; set; }
