@@ -73,6 +73,23 @@ namespace Driver.Controllers
 
         }
 
+
+        
+        [Route("api/receipts/get/pending")]
+        public IActionResult GetPending(int skip, int take, IDictionary<string, string> values)
+        {
+
+            var app = _db.Apps.FirstOrDefault();
+            IQueryable<VwReceipt> receipts = _db.VwReceipts.Where(x => !x.IsProcessed);
+
+            if(app.ProcessesInitDate != null)
+                receipts = receipts.Where(x => x.Date.Date >= app.ProcessesInitDate.Value.Date);           
+            
+            return Json(receipts);
+
+        }
+
+
         [HttpPost("api/receipts/post")]
         public IActionResult Post([FromBody] Receipt receipt)
         {

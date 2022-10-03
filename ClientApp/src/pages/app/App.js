@@ -10,13 +10,13 @@ import Form, {
     
 } from 'devextreme-react/form';
 import useAuthorization from '../../hooks/useAuthorization';
-import { Button, NumberBox, Validator } from 'devextreme-react';
+import { Button, NumberBox, Validator, DateBox } from 'devextreme-react';
 import http from '../../utils/http';
 import notify from 'devextreme/ui/notify';
 import { useSelector,useDispatch } from 'react-redux';
 import { setAppInfo } from '../../store/app/appActions';
 import { DivFormColumns } from '../../components/form/DivForm';
-import { dataAccess, editorOptionsNumberBox, resources } from '../../data/app';
+import { dataAccess, editorOptionsNumberBox, formatDate, resources } from '../../data/app';
 
 const App = () => {
 
@@ -58,7 +58,7 @@ const App = () => {
         <div className="container small">
             <form onSubmit={onFormSubmit}>
                 <div className="dx-fieldset">
-                    <div className="dx-fieldset-header">Configuracion de cursos</div>
+                    <div className="dx-fieldset-header">Configuración de cursos</div>
                     <DivFormColumns title='Precio del curso'
                         description="Ingrese el precio del curso">                        
                         <NumberBox                            
@@ -70,6 +70,18 @@ const App = () => {
                                 <RequiredRule message="Este campo es requerido" />
                             </Validator>
                         </NumberBox>
+                    </DivFormColumns>
+                    <div className="dx-fieldset-header">Configuración de Arqueo</div>
+                    <DivFormColumns title='Inicio de arqueo'
+                        description="Seleccione la fecha del inicio de proceso, dejar en vacio si aplica desde siempre">                        
+                        <DateBox                            
+                            value={app.processesInitDate}  
+                            showClearButton={true}
+                            openOnFieldClick={true}
+                            displayFormat={formatDate}
+                            onValueChanged={e => setApp(app => ({ ...app, processesInitDate: e.value }))}                            
+                        >                            
+                        </DateBox>
                     </DivFormColumns>
                     <Button 
                         icon='save'

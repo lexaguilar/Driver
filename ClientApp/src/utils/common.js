@@ -21,7 +21,9 @@ const toCapital = string => [...string].map((c, i) => i == 0 ? c.toUpperCase() :
  */
 const getTicks = date => ((date.getTime() * 10000) + 621355968000000000);
 
-export const cellRender = currencyId =>  data => formatToMoney(data.value, currencyId || data.data.currencyId); 
+export const cellRender = currencyId =>  data => formatToMoney(data.value, currencyId || data.data.currencyId);
+
+export const cellRenderV2 = currencyId =>  data => data.value > 0 ? formatToMoney(data.value, currencyId || data.data.currencyId) : '--'; 
 
 export const cellRenderBold = currencyId => data => cellAsBold(formatToMoney(data.value, currencyId || data.data.currencyId));
 

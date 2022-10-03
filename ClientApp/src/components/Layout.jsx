@@ -23,6 +23,9 @@ import Instructors from '../pages/instructors/Instructors';
 import App from '../pages/app/App';
 import Resources from '../pages/resources';
 import Roles from '../pages/roles';
+import PaymentType from '../pages/paymentType/PaymentType';
+import Checkup from '../pages/checkup/Checkup';
+import Concepts from '../pages/concepts/Concepts';
 
 
 function Layout(props) {
@@ -42,6 +45,9 @@ function Layout(props) {
         ,builRoute('permisos', Resources)
         ,builRoute('recibos', Receipts)
         ,builRoute('instructores', Instructors)
+        ,builRoute('paymentType', PaymentType)
+        ,builRoute('concepts', Concepts)
+        ,builRoute('checkup', Checkup)
         ,builRoute('app', App)
         
     ];

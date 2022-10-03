@@ -11,5 +11,6 @@ namespace Driver.Models
         public decimal Price { get; set; }
         public string Name { get; set; }
         public string Version { get; set; }
+        public DateTime? ProcessesInitDate { get; set; }
     }
 }

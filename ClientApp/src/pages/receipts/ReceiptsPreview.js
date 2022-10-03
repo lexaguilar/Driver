@@ -128,10 +128,11 @@ const ReceiptsPreview = ({ isPreview = false, registerId = 0 }) => {
                 <Column dataField="date" caption="Fecha" dataType='date' format={formatDate} width={100} />          
                 <Column dataField="identification" width={140} caption="Identificacion" visible={!isPreview}/>
                 <Column dataField="name" caption="Nombre completo" visible={!isPreview} />
-                <Column dataField="reference" caption="Recibo" />
+                <Column dataField="reference" caption="Recibo" width={90}/>
                 <Column dataField="amount" caption="Pagado" width={90} cellRender={cellRenderBold()}/>
                 <Column dataField="balance" caption="Pendiente" width={90} cellRender={cellRenderBold()}/>
                 <Column dataField="observation" caption='Observacion' />
+                <Column dataField="paymentType" caption='Tipo Pago' />
                 <Column dataField="createBy" caption='Creado por' width={100} />
                 <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={180}/>             
             </DataGrid>

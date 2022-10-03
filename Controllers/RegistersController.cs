@@ -27,8 +27,8 @@ namespace Driver.Controllers
             var register = _db.Registers
             .Include(x => x.Client)
             .Include(x => x.TypeLicence)
-            .Include(x => x.Receipts)
             .Include(x => x.Instructor)
+            .Include(x => x.Receipts).ThenInclude(x => x.PaymentType)
             .FirstOrDefault(x => x.Id == id);
 
             return Json(register);
@@ -239,7 +239,9 @@ namespace Driver.Controllers
                         Observation = "",
                         Date = DateTime.Today,
                         CreateAt = DateTime.Now,
-                        CreateBy = user.Username
+                        CreateBy = user.Username,
+                        PaymentTypeId = register.PaymentTypeId.Value,
+                        ConceptId = register.ConceptId.Value
 
                     };
 

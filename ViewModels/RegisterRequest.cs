@@ -25,6 +25,8 @@ namespace Driver.ViewModel
         public DateTime StartDate  { get; set; }
         public decimal SubTotal  { get; set; }
         public decimal Total  { get; set; }
+        public int? PaymentTypeId  { get; set; }
+        public int? ConceptId  { get; set; }
 
 
     }

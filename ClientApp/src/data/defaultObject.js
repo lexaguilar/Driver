@@ -41,7 +41,8 @@ export const dataDefault = {
     typeLicenceId: undefined,
     instructorId: 1,
     observation: '',
-    reference: ''
+    reference: '',
+    paymentTypeId: undefined
 }
 
 export const dataReceipt = { 

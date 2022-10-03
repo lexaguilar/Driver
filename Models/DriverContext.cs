@@ -22,7 +22,11 @@ namespace Driver.Models
         public virtual DbSet<Client> Clients { get; set; }
         public virtual DbSet<Instructor> Instructors { get; set; }
         public virtual DbSet<Receipt> Receipts { get; set; }
+        public virtual DbSet<PaymentType> PaymentTypes { get; set; }
+        public virtual DbSet<Concept> Concepts { get; set; }
         public virtual DbSet<Register> Registers { get; set; }
+        public virtual DbSet<Discharge> Discharges { get; set; }
+        public virtual DbSet<DischargeType> DischargeTypes { get; set; }
         public virtual DbSet<Resource> Resources { get; set; }
         public virtual DbSet<Rol> Rols { get; set; }
         public virtual DbSet<RolResource> RolResources { get; set; }
@@ -175,6 +179,43 @@ namespace Driver.Models
                     .HasForeignKey(d => d.RegisterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Receipts_Registers");
+
+                entity.HasOne(d => d.PaymentType)
+                    .WithMany(p => p.Receipts)
+                    .HasForeignKey(d => d.PaymentTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Receipts_PaymentTypes");
+
+                entity.HasOne(d => d.Concept)
+                    .WithMany(p => p.Receipts)
+                    .HasForeignKey(d => d.ConceptId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Receipts_Concepts");
+            });
+
+            modelBuilder.Entity<Discharge>(entity =>
+            {
+               
+                entity.Property(e => e.Amount).HasColumnType("money");
+
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.Observation)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.DischargeType)
+                    .WithMany(p => p.Discharges)
+                    .HasForeignKey(d => d.DischargeTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Discharges_types");
             });
 
             modelBuilder.Entity<Register>(entity =>

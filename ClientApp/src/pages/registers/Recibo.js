@@ -21,8 +21,10 @@ const Recibo = props => {
     const { authorized, auth } = useAuthorization([resources.recibos, dataAccess.create ]);
 
     const dispatch = useDispatch();
-    const { receipt: { open, id } } = useSelector(store => store);
-    const refForm = useRef();    
+    const { user, receipt: { open, id } } = useSelector(store => store);
+    const refForm = useRef();   
+    
+    const prefix = user.areaId == 1 ? 'B' : 'A';
 
     const [data, setData] = useState({ ...dataReceipt });
     const [dataClient, setDataClient] = useState({});
@@ -54,6 +56,8 @@ const Recibo = props => {
 
             setSaving({ loading: true, text: 'Guardando...', changed: false });
             let newData = { ...data, registerId: id };
+
+            newData.reference =  prefix +'-'+ newData.reference;
 
             http(uri.receipts.insert).asPost(newData).then(resp => {
 
@@ -106,8 +110,8 @@ const Recibo = props => {
     return authorized(
         <div>
             <Popup
-                width={650}
-                height={600}
+                width={700}
+                height={650}
                 title={`Registrar recibo para la matricula #${dataClient.code}`}
                 onHiding={onHiding}
                 visible={open}
@@ -155,10 +159,29 @@ const Recibo = props => {
                                     <Label text="Monto Aplicado" />
                                     <RequiredRule message="Complete este campo" />
                                 </SimpleItem>
-                                <SimpleItem dataField="reference" colSpan={3}>
+                                <SimpleItem dataField="reference"  editorType="dxNumberBox" colSpan={3} editorOptions={{
+                                        format: prefix + " ###",
+                                        placeholder:prefix + '0000'
+                                    }}>
                                     <Label text="No Recibo" />
                                     <RequiredRule message="Complete este campo" />
                                 </SimpleItem>
+                                <SimpleItem dataField="paymentTypeId" colSpan={3} editorType="dxSelectBox" editorOptions={{
+                                    dataSource: createStore({ name: 'paymentType' })
+                                    , displayExpr: "name"
+                                    , valueExpr: "id"
+                                }}>
+                                    <Label text="Tipo Pago" />
+                                    <RequiredRule message="Seleccione el tipo de pago" />
+                                </SimpleItem>
+                                <SimpleItem dataField="conceptId" colSpan={3} editorType="dxSelectBox" editorOptions={{
+                                    dataSource: createStore({ name: 'Concept' })
+                                    , displayExpr: "name"
+                                    , valueExpr: "id"
+                                }}>
+                                    <Label text="Concepto" />
+                                    <RequiredRule message="Seleccione el concepto" />
+                                </SimpleItem>     
                                 <SimpleItem dataField="observation" colSpan={6}>
                                     <Label text="Observacion" />
                                     <StringLengthRule max={250} message="Maximo de carateres permitidos 250"  />

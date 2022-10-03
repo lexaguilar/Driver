@@ -17,7 +17,10 @@ const Nuevo = props => {
     const { authorized, auth } = useAuthorization([resources.matriculas, dataAccess.create ]);
 
     const dispatch = useDispatch();
-    const { register: { open, id }, appInfo } = useSelector(store => store);
+    const { user, register: { open, id }, appInfo } = useSelector(store => store);
+
+    const prefix = user.areaId == 1 ? 'B' : 'A';
+
     const refForm = useRef();
 
     const [data, setData] = useState({ ...dataDefault });
@@ -51,6 +54,8 @@ const Nuevo = props => {
 
                 setSaving({ loading: true, text: 'Guardando...' });
                 let newData = { ...data };
+
+                newData.reference = (newData.reference === '' || newData.reference === null) ? '': prefix +'-'+ newData.reference;
     
                 http(uri.registers.insert).asPost(newData).then(resp => {
     
@@ -98,8 +103,8 @@ const Nuevo = props => {
     return authorized(
         <div>
             <Popup
-                width={580}
-                height={700}
+                width={650}
+                height={680}
                 title={`Nueva matricula`}
                 onHiding={onHiding}
                 visible={open}
@@ -176,19 +181,29 @@ const Nuevo = props => {
                         <SimpleItem dataField="balance" colSpan={3} editorType="dxNumberBox" editorOptions={{ ...editorOptionsNumberBox, disabled: true }}>
                             <Label text="Pendiente" />
                         </SimpleItem>
-                        <SimpleItem dataField="reference" colSpan={3}>
+                        <SimpleItem dataField="reference" editorType="dxNumberBox" colSpan={3} editorOptions={{
+                                        format: prefix + " ###",
+                                        placeholder: prefix + '0000'
+                                    }}>
                             <Label text="No Recibo" />
                             <AsyncRule message="Ingrese el recibo" validationCallback={validationCallback}></AsyncRule>
                         </SimpleItem>
-                        <EmptyItem colSpan={3} />
-                        <SimpleItem dataField="categories" colSpan={3} editorType="dxTagBox" editorOptions={{
-                            dataSource: [1, 2, 3],
-                            showSelectionControls: true,
-
+                        <SimpleItem dataField="paymentTypeId" colSpan={3} editorType="dxSelectBox" editorOptions={{
+                            dataSource: createStore({ name: 'paymentType' })
+                            , displayExpr: "name"
+                            , valueExpr: "id"
                         }}>
-                            <Label text="Categorias" />
-                            <RequiredRule message="Seleccione una categoria" />
+                            <Label text="Tipo Pago" />
+                            <RequiredRule message="Seleccione el tipo de pago" />
                         </SimpleItem>
+                        <SimpleItem dataField="conceptId" colSpan={3} editorType="dxSelectBox" editorOptions={{
+                            dataSource: createStore({ name: 'Concept' })
+                            , displayExpr: "name"
+                            , valueExpr: "id"
+                        }}>
+                            <Label text="Concepto" />
+                            <RequiredRule message="Seleccione el concepto" />
+                        </SimpleItem>                       
                         <SimpleItem dataField="typeLicenceId" colSpan={3} editorType="dxRadioGroup" editorOptions={{
                             dataSource: typeLicences,
                             displayExpr: 'name',
@@ -198,8 +213,15 @@ const Nuevo = props => {
                             <RequiredRule message="Complete este campo" />
                         </SimpleItem>
 
+                        <SimpleItem dataField="categories" colSpan={3} editorType="dxTagBox" editorOptions={{
+                            dataSource: [1, 2, 3],
+                            showSelectionControls: true,
 
-                        <SimpleItem dataField="instructorId" colSpan={6} editorType="dxSelectBox" editorOptions={{
+                        }}>
+                            <Label text="Categorias" />
+                            <RequiredRule message="Seleccione una categoria" />
+                        </SimpleItem>
+                        <SimpleItem dataField="instructorId" colSpan={3} editorType="dxSelectBox" editorOptions={{
                             dataSource: createStore({ name: 'Instructor' })
                             , displayExpr: "name"
                             , valueExpr: "id"

@@ -33,7 +33,8 @@ namespace Driver.Controllers
             if(oldApp==null)
                 return BadRequest("Los valores iniciales de la aplicacion no estan establecidos");       
 
-            oldApp.Price = app.Price;    
+            oldApp.Price = app.Price;  
+            oldApp.ProcessesInitDate = app.ProcessesInitDate;  
 
             db.SaveChanges();
 
