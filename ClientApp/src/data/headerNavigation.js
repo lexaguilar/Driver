@@ -28,6 +28,7 @@ const menu = [{
             { title: 'Sucursales', url: `${_path.root}/sucursales` },
             { title: 'Instructores', url: `${_path.root}/instructores` },
             { title: 'Medios de pago', url: `${_path.root}/paymentType` },
+            { title: 'Tipos de egresos', url: `${_path.root}/dischargeTypes` },
             { title: 'Conceptos de pagos', url: `${_path.root}/concepts` },
             { title: 'Usuarios', url: `${_path.root}/usuarios` },
             { title: 'Roles', url: `${_path.root}/roles` },
