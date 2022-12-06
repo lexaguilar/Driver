@@ -462,3 +462,11 @@
         border-radius: 100% 0 0 0;
         border-width: 1px 0 0 1px;
     }
+    
+    .w-150 {
+        width: 140px;
+    }
+    
+    .grid-small>.dx-datagrid .dx-row>td {
+        padding: 2px !important;
+    }

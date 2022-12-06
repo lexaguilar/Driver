@@ -27,6 +27,7 @@ import PaymentType from '../pages/paymentType/PaymentType';
 import Checkup from '../pages/checkup/Checkup';
 import Concepts from '../pages/concepts/Concepts';
 import DischargeTypes from '../pages/dischargeTypes/DischargeTypes';
+import Nuevo from '../pages/checkup/Nuevo';
 
 
 function Layout(props) {
@@ -50,6 +51,7 @@ function Layout(props) {
         ,builRoute('concepts', Concepts)
         ,builRoute('dischargeTypes', DischargeTypes)
         ,builRoute('checkup', Checkup)
+        ,builRoute('checkup/details', Nuevo)
         ,builRoute('app', App)
         
     ];

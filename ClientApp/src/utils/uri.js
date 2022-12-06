@@ -11,7 +11,8 @@ const uri = {
     registers: createProxyBase('registers'),
     receipts: createProxyBase('receipts'),
     instructors: createProxyBase('instructors'),
-    roles:createProxyBase('roles'),
+    roles: createProxyBase('roles'),
+    checkups: createProxyBase('checkups')
 };
 
 uri.account = 'account/auth';

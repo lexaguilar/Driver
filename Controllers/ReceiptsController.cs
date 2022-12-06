@@ -75,19 +75,24 @@ namespace Driver.Controllers
 
 
         
-        [Route("api/receipts/get/pending")]
-        public IActionResult GetPending(int skip, int take, IDictionary<string, string> values)
+        [Route("api/receipts/get/pending/{checkupId}")]
+        public IActionResult GetPending(int checkupId)
         {
 
             var app = _db.Apps.FirstOrDefault();
-            IQueryable<VwReceipt> receipts = _db.VwReceipts.Where(x => !x.IsProcessed);
+            var checkup = _db.Checkups.FirstOrDefault(x => x.Id == checkupId);
+            IQueryable<VwReceipt> receipts = _db.VwReceipts.Where(x => x.AreaId == checkup.AreaId && !x.IsProcessed);
+            
+            receipts = receipts.Where(x => x.Date.Date >= checkup.DateInit.Date && x.Date.Date <= checkup.DateEnd.Date);
 
             if(app.ProcessesInitDate != null)
-                receipts = receipts.Where(x => x.Date.Date >= app.ProcessesInitDate.Value.Date);           
-            
+                receipts = receipts.Where(x => x.Date.Date >= app.ProcessesInitDate.Value.Date); 
+
             return Json(receipts);
 
         }
+
+       
 
 
         [HttpPost("api/receipts/post")]
@@ -112,6 +117,11 @@ namespace Driver.Controllers
                 
             if(!register.Active)
                 return BadRequest($"La matricula {receipt.RegisterId} no esta activa");
+
+            var checkupClosed = _db.Checkups.FirstOrDefault(x => x.DateInit <= receipt.Date && x.DateEnd >=  receipt.Date && x.IsClosed);
+            if(checkupClosed != null){
+                return BadRequest($"No se puede agregar un recibo con la fecha {receipt.Date} ya que ese periodo está cerrado por el arqueo {checkupClosed.Id}");
+            }
             
                         
             var user = this.GetAppUser();

@@ -148,6 +148,17 @@ namespace Driver.Controllers
 
         }
 
+        [Route("api/registers/get/pending/{checkupId}")]
+        public IActionResult GetPending(int checkupId)
+        {
+            
+            var checkup = _db.Checkups.FirstOrDefault(x => x.Id == checkupId);
+            var registers = _db.Registers.Include(x => x.Client).Where(x => x.CreateAt.Date >= checkup.DateInit.Date && x.CreateAt.Date <= checkup.DateEnd.Date);
+
+            return Json(registers);
+
+        }
+
         [HttpPost("api/registers/post")]
         public IActionResult Post([FromBody] RegisterRequest register)
         {
@@ -244,6 +255,11 @@ namespace Driver.Controllers
                         ConceptId = register.ConceptId.Value
 
                     };
+
+                    var checkupClosed = _db.Checkups.FirstOrDefault(x => x.DateInit <= newReceipt.Date && x.DateEnd >=  newReceipt.Date && x.IsClosed);
+                    if(checkupClosed != null){
+                        return BadRequest($"No se puede agregar un recibo con la fecha {newReceipt.Date} ya que ese periodo está cerrado por el arqueo {checkupClosed.Id}");
+            }
 
                     newRegister.Receipts.Add(newReceipt);
 

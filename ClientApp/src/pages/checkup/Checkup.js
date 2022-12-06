@@ -1,30 +1,26 @@
 import React, { useState, useRef } from 'react';
 
 import { Box, DataGrid, DateBox, DropDownBox, SelectBox } from "devextreme-react";
-import { Column, RequiredRule, FilterRow, Lookup, Pager, Paging, Editing, TotalItem, Summary } from 'devextreme-react/data-grid';
+import { Column, FilterRow, Button, Pager, Paging, Editing, Form, Popup, Lookup } from 'devextreme-react/data-grid';
+import { Item, RequiredRule, StringLengthRule } from 'devextreme-react/form';
 
 import { store } from '../../services/store';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
-import { formatDate } from '../../data/app';
+import { editorOptionsSwitch, formatDate, formatDateTime } from '../../data/app';
 import uri from '../../utils/uri';
-import { cellRender, cellRenderV2, formatToMoney } from '../../utils/common';
+import { cellRender, cellRenderBold, cellRenderV2, formatToMoney } from '../../utils/common';
 import { createStore } from '../../utils/proxy';
+import { userService } from '../../services/user.service';
 
-const Checkup = () => {
+const Checkup = (props) => {
 
     //const [ param, setParam ] = useState({});
 
+    const user = userService.getUser();
+
     let dataGrid = useRef();
-
-    const onRowPrepared = (e) => {
-        if (e.rowType == 'data') {
-
-            if (!e.data.active)
-                e.rowElement.classList.add('no-activo');
-
-        }
-    }
+  
 
     const onCellPrepared = e => {
 
@@ -43,7 +39,19 @@ const Checkup = () => {
 
     }
 
-    let egresos = [];
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Crear nuevo',
+                icon:'plus',
+                type:'default',
+                stylingMode:"outlined",
+                onClick: () =>  dataGrid.current.instance.addRow()
+            }
+        });
+    }  
 
     const title = 'Arqueos';
 
@@ -51,110 +59,86 @@ const Checkup = () => {
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} />
-            {/* <DateBox type="date" displayFormat={formatDate} openOnFieldClick={true} /> */}
-            <div style={{ display: 'flex' }}>
-                <div style={{ width:'65%', padding:'5px' }}>
-                    <label htmlFor="">Ingresos</label>
-                    <DataGrid id="gridContainer"
-                        ref={dataGrid}
-                        selection={{ mode: 'single' }}
-                        dataSource={store({ uri: { get: 'receipts/get/pending' } })}
-                        showBorders={true}
-                        showRowLines={true}
-                        allowColumnResizing={true}
-                        columnHidingEnabled={true}
-                        allowColumnReordering={true}
-                        hoverStateEnabled={true}
-                        columnAutoWidth={true}
-                        onCellPrepared={onCellPrepared}
-                        onRowPrepared={onRowPrepared}
+            <DataGrid id="gridContainer"
+                ref={dataGrid}
+                selection={{ mode: 'single' }}
+                dataSource={store({ uri: uri.checkups })}
+                showBorders={true}
+                showRowLines={true}
+                allowColumnResizing={true}
+                columnHidingEnabled={true}
+                allowColumnReordering={true}
+                hoverStateEnabled={true}
+                columnAutoWidth={true}
+                onCellPrepared={onCellPrepared}
+                onToolbarPreparing={onToolbarPreparing}
+            >
+                <Paging defaultPageSize={10} />
+                <Pager
+                    showInfo={true}
+                    showPageSizeSelector={true}
+                    allowedPageSizes={[10, 30, 50, 100]}
+                />
+                <FilterRow visible={true} />
+                <Column dataField="name" caption="Nombre"  width={200} />
+                <Column dataField="dateInit" caption="Desde" dataType='date' format={formatDate} width={150} alignment="right" />
+                <Column dataField="dateEnd" caption="Hasta" dataType='date' format={formatDate} width={150} alignment="right" />
+                <Column dataField="rate" caption="Tasa Cambio"  width={120} cellRender={cellRenderBold()} />
+                {/* <Column dataField="totalIn" caption="Total Ingresos"  width={120} cellRender={cellRenderBold()} />
+                <Column dataField="totalOut" caption="Total Egresos"  width={120} cellRender={cellRenderBold()} />
+                <Column dataField="balance" caption="Balance"  width={120} cellRender={cellRenderBold()} /> */}
+                <Column dataField="isClosed" dataType='boolean' caption="Cerrado"  width={120} />
+                <Column dataField="areaId" caption="Sucursal"  width={120} >
+                    <Lookup dataSource={createStore({ name: 'Area' })} valueExpr="id" displayExpr="name" ></Lookup>
+                </Column>
 
-                    >
-                        <Paging defaultPageSize={10} />
-                        <Pager
-                            showInfo={true}
-                            showPageSizeSelector={true}
-                            allowedPageSizes={[10, 30, 50, 100]}
-                        />
-                        <FilterRow visible={true} />
-                        <Column dataField="date" caption="Fecha" dataType='date' format={formatDate} width={100} alignment="right" />
-                        <Column dataField="reference" caption="Recibo" width={90} />
-                        <Column dataField="name" caption="Cliente" />
-                        <Column dataField="concept" caption="Concepto" />
-                        <Column dataField="tarjeta" width={90} cellRender={cellRenderV2()} />
-                        <Column dataField="transferencia" caption={'Deposito'} width={90} cellRender={cellRenderV2()} />
-                        <Column dataField="efectivo" width={90} cellRender={cellRenderV2()} />
-                        <Summary>
-                            <TotalItem
-                                column="efectivo"
-                                summaryType="sum"
-                                customizeText={data => formatToMoney(data.value)}
-                            />
-                            <TotalItem
-                                column="transferencia"
-                                summaryType="sum"
-                                customizeText={data => formatToMoney(data.value)}
-                            />
-                            <TotalItem
-                                column="tarjeta"
-                                summaryType="sum"
-                                customizeText={data => formatToMoney(data.value)}
-                            />
-                        </Summary>
+                <Column dataField="createAt" caption='Creado el' dataType='date' format={formatDateTime} />
+                <Column dataField="createBy" caption='Creado por' width={100} />
+                <Column dataField="modifyAt" caption='Modificado el' dataType='date' format={formatDateTime} />
+                <Column dataField="modifyBy" caption='Modificado por' width={100} />
+                <Column type='buttons'>
+                    <Button name='edit' />                  
+                    <Button icon='menu'
+                        onClick={e => {
+
+                            const { id } = e.row.data;  
+                            props.history.push('/driver/checkup/details', { id });
+
+                        }}
+                    />
+                </Column>
+                <Editing
+                    mode="popup"
+                    allowUpdating={true}
+                    useIcons={true}
+                >
+                    <Popup title={title + ' Sucursal ' + user.area } showTitle={true} width={400} height={360}>
+                        
+                    </Popup>
+                    <Form>
+                        <Item  dataField="name" colSpan={2} >
+                            <RequiredRule message="El campo es requerida"/>
+                            <StringLengthRule max={50} min={2} message="Máximo de caracteres 50 y 2 mínimo"/>
+                        </Item>
+                        <Item  dataField="dateInit" editorType='dxDateBox' colSpan={2} >
+                            <RequiredRule message="El campo es requerida"/>
+                        </Item>
+                        <Item  dataField="dateEnd" editorType='dxDateBox' colSpan={2} >
+                            <RequiredRule message="El campo es requerida"/>
+                        </Item>
+                        <Item  dataField="rate" editorType='dxNumberBox' colSpan={2} >
+                            <RequiredRule message="El campo es requerida"/>
+                        </Item>                      
+                        <Item  visible={false} dataField="areaId" colSpan={2} >
+                            <RequiredRule message="La sucursal es requerida"/>
+                        </Item>                      
+                        <Item visible={false}  dataField="isClosed"  editorType="dxSwitch" editorOptions={{...editorOptionsSwitch}}  colSpan={2}>
+                        </Item> 
+                    </Form>
+                </Editing>
 
 
-                    </DataGrid>
-                </div>
-                <div style={{ width:'33%', padding:'5px' }}>
-                    <label htmlFor="">Egresos</label>
-                    <DataGrid id="gridContainer2"
-                        selection={{ mode: 'single' }}
-                        dataSource={egresos}
-                        showBorders={true}
-                        showRowLines={true}
-                        allowColumnResizing={true}
-                        columnHidingEnabled={true}
-                        allowColumnReordering={true}
-                        hoverStateEnabled={true}
-                        columnAutoWidth={true}
-                        onCellPrepared={onCellPrepared}
-                       
-                    >
-                        <Paging defaultPageSize={10} />
-                        <Pager
-                            showInfo={true}
-                            showPageSizeSelector={true}
-                            allowedPageSizes={[10, 30, 50, 100]}
-                        />
-                        <FilterRow visible={true} />
-                        <Column dataField="date" caption="Fecha" dataType='date' format={formatDate} width={100} alignment="right" >
-                        <RequiredRule />
-                        </Column>
-                        <Column dataField="dischargeTypeId" caption="Egreso" width={90} >
-                            <Lookup dataSource={createStore({ name: 'DischargeType' })} valueExpr="id" displayExpr="name" ></Lookup>
-                            <RequiredRule />
-                        </Column>
-                        <Column dataField="amount" caption="Monto" dataType='number' ><RequiredRule /></Column>
-                        <Column dataField="observation" caption="Observación" hidingPriority={9} />
-                        <Editing
-                            mode="row"
-                            allowUpdating={true}
-                            allowAdding={true}
-                            allowDeleting={true}
-                            selectTextOnEditStart={true}
-                            useIcons={true}
-                        />
-                        <Summary>
-                            <TotalItem
-                                column="amount"
-                                summaryType="sum"
-                                customizeText={data => formatToMoney(data.value)}
-                            />                           
-                        </Summary>
-                    </DataGrid>
-                </div>
-
-            </div>
+            </DataGrid>
         </div>
     );
 }

@@ -11,6 +11,7 @@ namespace Driver.Models
         {
             Registers = new HashSet<Register>();
             Users = new HashSet<User>();
+            Checkups = new HashSet<Checkup>();
         }
 
         public int Id { get; set; }
@@ -19,5 +20,6 @@ namespace Driver.Models
 
         public virtual ICollection<Register> Registers { get; set; }
         public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<Checkup> Checkups { get; set; }
     }
 }

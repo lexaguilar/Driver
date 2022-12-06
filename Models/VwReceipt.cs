@@ -20,10 +20,10 @@ namespace Driver.Models
         public DateTime CreateAt { get; set; }
         public string CreateBy { get; set; }
         public string Observation { get; set; }
+        public int RegisterId { get; set; }
+        public bool IsProcessed { get; set; }
         public string PaymentType { get; set; }
         public string Concept { get; set; }
-        public bool IsProcessed { get; set; }
-        public int RegisterId { get; set; }
         public decimal Efectivo { get; set; }
         public decimal Tarjeta { get; set; }
         public decimal Transferencia { get; set; }

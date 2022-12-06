@@ -19,14 +19,15 @@ namespace Driver.Models
 
         public virtual DbSet<App> Apps { get; set; }
         public virtual DbSet<Area> Areas { get; set; }
+        public virtual DbSet<Checkup> Checkups { get; set; }
         public virtual DbSet<Client> Clients { get; set; }
-        public virtual DbSet<Instructor> Instructors { get; set; }
-        public virtual DbSet<Receipt> Receipts { get; set; }
-        public virtual DbSet<PaymentType> PaymentTypes { get; set; }
         public virtual DbSet<Concept> Concepts { get; set; }
-        public virtual DbSet<Register> Registers { get; set; }
         public virtual DbSet<Discharge> Discharges { get; set; }
         public virtual DbSet<DischargeType> DischargeTypes { get; set; }
+        public virtual DbSet<Instructor> Instructors { get; set; }
+        public virtual DbSet<PaymentType> PaymentTypes { get; set; }
+        public virtual DbSet<Receipt> Receipts { get; set; }
+        public virtual DbSet<Register> Registers { get; set; }
         public virtual DbSet<Resource> Resources { get; set; }
         public virtual DbSet<Rol> Rols { get; set; }
         public virtual DbSet<RolResource> RolResources { get; set; }
@@ -40,13 +41,13 @@ namespace Driver.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=LEX-PC\\PCLEX;Database=Driver;User Id=sa;Password=123;");
+                optionsBuilder.UseSqlServer("Server=SQL5108.site4now.net;Database=db_a13b77_drivertest;User Id=db_a13b77_drivertest_admin;Password=drivertest123;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Modern_Spanish_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<App>(entity =>
             {
@@ -59,6 +60,8 @@ namespace Driver.Models
 
                 entity.Property(e => e.Price).HasColumnType("money");
 
+                entity.Property(e => e.ProcessesInitDate).HasColumnType("datetime");
+
                 entity.Property(e => e.Version)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -70,6 +73,34 @@ namespace Driver.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Checkup>(entity =>
+            {
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DateEnd).HasColumnType("date");
+
+                entity.Property(e => e.DateInit).HasColumnType("date");
+
+                entity.Property(e => e.ModifyAt).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifyBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Rate).HasColumnType("money");
             });
 
             modelBuilder.Entity<Client>(entity =>
@@ -121,6 +152,52 @@ namespace Driver.Models
                     .IsFixedLength(true);
             });
 
+            modelBuilder.Entity<Concept>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Discharge>(entity =>
+            {
+                entity.Property(e => e.Amount).HasColumnType("money");
+
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.Observation)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Checkup)
+                    .WithMany(p => p.Discharges)
+                    .HasForeignKey(d => d.CheckupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Checkups_Discharges");
+
+                entity.HasOne(d => d.DischargeType)
+                    .WithMany(p => p.Discharges)
+                    .HasForeignKey(d => d.DischargeTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Discharges_types");
+            });
+
+            modelBuilder.Entity<DischargeType>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Instructor>(entity =>
             {
                 entity.Property(e => e.Name)
@@ -133,6 +210,14 @@ namespace Driver.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.PhoneNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<PaymentType>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
@@ -163,6 +248,8 @@ namespace Driver.Models
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
+                entity.Property(e => e.PaymentTypeId).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.Reference)
                     .IsRequired()
                     .HasMaxLength(20)
@@ -174,48 +261,21 @@ namespace Driver.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Receipts_Clients");
 
+                entity.HasOne(d => d.Concept)
+                    .WithMany(p => p.Receipts)
+                    .HasForeignKey(d => d.ConceptId)
+                    .HasConstraintName("FK_Receipts_Concepts");
+
+                entity.HasOne(d => d.PaymentType)
+                    .WithMany(p => p.Receipts)
+                    .HasForeignKey(d => d.PaymentTypeId)
+                    .HasConstraintName("FK_Receipts_PaymentTypes");
+
                 entity.HasOne(d => d.Register)
                     .WithMany(p => p.Receipts)
                     .HasForeignKey(d => d.RegisterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Receipts_Registers");
-
-                entity.HasOne(d => d.PaymentType)
-                    .WithMany(p => p.Receipts)
-                    .HasForeignKey(d => d.PaymentTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Receipts_PaymentTypes");
-
-                entity.HasOne(d => d.Concept)
-                    .WithMany(p => p.Receipts)
-                    .HasForeignKey(d => d.ConceptId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Receipts_Concepts");
-            });
-
-            modelBuilder.Entity<Discharge>(entity =>
-            {
-               
-                entity.Property(e => e.Amount).HasColumnType("money");
-
-                entity.Property(e => e.CreateAt).HasColumnType("datetime");
-
-                entity.Property(e => e.CreateBy)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Date).HasColumnType("datetime");
-
-                entity.Property(e => e.Observation)
-                    .HasMaxLength(500)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.DischargeType)
-                    .WithMany(p => p.Discharges)
-                    .HasForeignKey(d => d.DischargeTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Discharges_types");
             });
 
             modelBuilder.Entity<Register>(entity =>
@@ -394,6 +454,10 @@ namespace Driver.Models
 
                 entity.Property(e => e.Balance).HasColumnType("money");
 
+                entity.Property(e => e.Concept)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.CreateAt).HasColumnType("datetime");
 
                 entity.Property(e => e.CreateBy)
@@ -402,6 +466,8 @@ namespace Driver.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.Efectivo).HasColumnType("money");
 
                 entity.Property(e => e.Identification)
                     .IsRequired()
@@ -417,12 +483,20 @@ namespace Driver.Models
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
+                entity.Property(e => e.PaymentType)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Reference)
                     .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Tarjeta).HasColumnType("money");
+
                 entity.Property(e => e.Total).HasColumnType("money");
+
+                entity.Property(e => e.Transferencia).HasColumnType("money");
             });
 
             modelBuilder.Entity<VwRegister>(entity =>
