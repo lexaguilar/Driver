@@ -51,6 +51,10 @@ const ReceiptsPreview = ({ isPreview = false, registerId = 0 }) => {
                 text: `Copiar`,
                 icon :  'unselectall',
                 onItemClick: () => copyText(e.row.values[e.columnIndex]) 
+            },{
+                text: `Anular`,
+                icon :  'remove',
+                onItemClick: () => copyText(e.row.values[e.columnIndex]) 
             });
         }
     }
