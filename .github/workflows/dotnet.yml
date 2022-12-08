@@ -29,4 +29,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Publish
-      run: dotnet publish /p:Configuration=Release /p:PublishProfile="Drivers Test.pubxml" /p=${{ secrets.DRIVERS_PASSWORD }}
+      run: dotnet publish /p:Configuration=Release /p:PublishProfile="Drivers Test.pubxml" /p:Password=${{ secrets.DRIVERS_PASSWORD }}
