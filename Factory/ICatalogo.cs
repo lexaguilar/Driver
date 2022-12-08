@@ -1,8 +1,0 @@
-namespace Driver
-{
-    interface ICatalogo{
-        
-    }
-
-    
-}
