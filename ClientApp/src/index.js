@@ -10,7 +10,10 @@ import 'slick-carousel/slick/slick.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'react-input-range/lib/css/index.css';
-import './scss/style.scss';
+import './css/2.3aa93140.chunk.css'
+import './css/main.2be75501.chunk.css'
+import './css/main.7190ffe9.chunk.css'
+//import './scss/style.scss';
 
 const rootElement = document.getElementById('root');
 
