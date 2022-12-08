@@ -1,0 +1,26 @@
+import { createProxy, createProxyBase } from "./proxy";
+
+const uri = {    
+    users: createProxyBase('users'),
+    dischargeTypes: createProxyBase('dischargeTypes'),
+    areas: createProxyBase('areas'),
+    concepts: createProxyBase('concepts'),
+    paymentType: createProxyBase('paymentTypes'),
+    dischargeType: createProxyBase('dischargeType'),
+    clients: createProxyBase('clients'),
+    registers: createProxyBase('registers'),
+    receipts: createProxyBase('receipts'),
+    instructors: createProxyBase('instructors'),
+    roles: createProxyBase('roles'),
+    checkups: createProxyBase('checkups')
+};
+
+uri.account = 'account/auth';
+uri.changepassword = 'account/changepassword';
+uri.resetPassword = 'account/resetpassword';
+
+uri.resources= roleId => `roles/${roleId}/resources`;
+
+export const routeReset = props => props.history.push({ pathname : '/driver/navig' }, { returnUrl: props.location.pathname }); 
+
+export default uri;
