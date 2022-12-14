@@ -50,6 +50,7 @@ export const dataReceipt = {
         date:new Date(moment().year(), moment().month(), moment().date(), 0, 0, 0, 0),
         observation:'',
         amount: 0,
-        reference:''
+        reference:'',
+        isMainPayment: true
     
 }

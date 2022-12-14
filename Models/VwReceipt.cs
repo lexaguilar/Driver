@@ -22,6 +22,7 @@ namespace Driver.Models
         public string Observation { get; set; }
         public int RegisterId { get; set; }
         public bool IsProcessed { get; set; }
+        public bool IsMainPayment { get; set; }
         public string PaymentType { get; set; }
         public string Concept { get; set; }
         public decimal Efectivo { get; set; }

@@ -203,7 +203,7 @@ const Nuevo = props => {
                         }}>
                             <Label text="Concepto" />
                             <RequiredRule message="Seleccione el concepto" />
-                        </SimpleItem>                       
+                        </SimpleItem>
                         <SimpleItem dataField="typeLicenceId" colSpan={3} editorType="dxRadioGroup" editorOptions={{
                             dataSource: typeLicences,
                             displayExpr: 'name',
@@ -229,6 +229,7 @@ const Nuevo = props => {
                             <Label text="Instructor" />
                             <RequiredRule message="Complete este campo" />
                         </SimpleItem>
+                        
                         <SimpleItem dataField="observation" colSpan={6} editorType="dxTextArea">
                             <StringLengthRule max={250} message="Maximo de carateres permitidos 250" />
                             <Label text="Observacion" />

@@ -173,7 +173,7 @@ const Nuevo = (props) => {
                 <div>             
                     <div>Arqueo #{id}-<b>{state?.area?.name}</b> desde <b>{moment(state.dateInit).format('DD-MM-YYYY')}</b> hasta <b>{moment(state.dateEnd).format('DD-MM-YYYY')}</b></div>
                     <div style={{ display: '-webkit-box', width: '100%', overflowY: 'scroll' }}>
-                        <div style={{ width:'800px', padding:'5px' }}>
+                        <div style={{ width:'820px', padding:'5px' }}>
                             <label htmlFor="">Ingresos</label>
                             <DataGrid id="gridContainer"
                                 className='grid-small'

@@ -29,4 +29,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Publish
-      run: dotnet publish /p:Configuration=Release /p:"serviciostesting-001-site9 - Web Deploy.pubxml" /p:Password=Alejando-2021
+      run: dotnet publish 

@@ -51,10 +51,6 @@ const ReceiptsPreview = ({ isPreview = false, registerId = 0 }) => {
                 text: `Copiar`,
                 icon :  'unselectall',
                 onItemClick: () => copyText(e.row.values[e.columnIndex]) 
-            },{
-                text: `Anular`,
-                icon :  'remove',
-                onItemClick: () => copyText(e.row.values[e.columnIndex]) 
             });
         }
     }
@@ -125,16 +121,17 @@ const ReceiptsPreview = ({ isPreview = false, registerId = 0 }) => {
                 <ColumnChooser enabled={!isPreview} />
                 <FilterRow visible={true} />
                 <Export enabled={!isPreview} fileName={title} allowExportSelectedData={true} />
-                <Column dataField="id" caption="Codigo #"  width={80}/>
-                <Column dataField="areaId" caption="Sucursal" width={100}>
+                <Column dataField="id" caption="Codigo"  width={70}/>
+                <Column dataField="isMainPayment" caption="Matricula" width={90}/>
+                <Column dataField="areaId" caption="Sucursal" width={70}>
                     <Lookup dataSource ={createStore({name: 'Area'})} valueExpr="id" displayExpr="name" ></Lookup>
                 </Column>
                 <Column dataField="date" caption="Fecha" dataType='date' format={formatDate} width={100} />          
                 <Column dataField="identification" width={140} caption="Identificacion" visible={!isPreview}/>
                 <Column dataField="name" caption="Nombre completo" visible={!isPreview} />
-                <Column dataField="reference" caption="Recibo" width={90}/>
-                <Column dataField="amount" caption="Pagado" width={90} cellRender={cellRenderBold()}/>
-                <Column dataField="balance" caption="Pendiente" width={90} cellRender={cellRenderBold()}/>
+                <Column dataField="reference" caption="Recibo" width={85}/>
+                <Column dataField="amount" caption="Pagado" width={85} cellRender={cellRenderBold()}/>
+                <Column dataField="balance" caption="Pendiente" width={85} cellRender={cellRenderBold()}/>
                 <Column dataField="observation" caption='Observacion' />
                 <Column dataField="paymentType" caption='Tipo Pago' />
                 <Column dataField="createBy" caption='Creado por' width={100} />

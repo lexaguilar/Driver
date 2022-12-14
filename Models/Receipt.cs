@@ -21,6 +21,7 @@ namespace Driver.Models
         public int? PaymentTypeId { get; set; }
         public bool IsProcessed { get; set; }
         public bool ConceptId5 { get; set; }
+        public bool IsMainPayment { get; set; }
         public int? ConceptId { get; set; }
 
         public virtual Client Client { get; set; }

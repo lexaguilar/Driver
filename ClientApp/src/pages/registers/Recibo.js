@@ -83,7 +83,7 @@ const Recibo = props => {
         http(uri.registers.getById(id)).asGet().then(resp => {
                
             //pagado
-            const pagado = resp.receipts.reduce((a, b) => (+a) + (+b.amount), 0);
+            const pagado = resp.receipts.filter(x => x.isMainPayment).reduce((a, b) => (+a) + (+b.amount), 0);
             //pendiente
             const pendiente = resp.total - pagado;
 
@@ -181,10 +181,16 @@ const Recibo = props => {
                                 }}>
                                     <Label text="Concepto" />
                                     <RequiredRule message="Seleccione el concepto" />
+                                </SimpleItem>   
+                                <SimpleItem dataField="isMainPayment" colSpan={3} editorType="dxSwitch" editorOptions={{
+                                    ...editorOptionsSwitch
+                                }}>
+                                    <Label text="Pago de matricula" />
                                 </SimpleItem>     
+                                <EmptyItem colSpan={3} />
                                 <SimpleItem dataField="observation" colSpan={6}>
                                     <Label text="Observacion" />
-                                    <StringLengthRule max={250} message="Maximo de carateres permitidos 250"  />
+                                    <StringLengthRule max={250} message="Máximo de carateres permitidos 250"  />
                                 </SimpleItem>
                             </GroupItem>
                         </Form>

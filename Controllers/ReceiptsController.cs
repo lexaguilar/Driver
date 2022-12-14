@@ -119,17 +119,19 @@ namespace Driver.Controllers
                 return BadRequest($"La matricula {receipt.RegisterId} no esta activa");
 
             var checkupClosed = _db.Checkups.FirstOrDefault(x => x.DateInit <= receipt.Date && x.DateEnd >=  receipt.Date && x.IsClosed);
-            if(checkupClosed != null){
+            if(checkupClosed != null)
                 return BadRequest($"No se puede agregar un recibo con la fecha {receipt.Date} ya que ese periodo está cerrado por el arqueo {checkupClosed.Id}");
-            }
-            
                         
             var user = this.GetAppUser();
 
-            decimal balance, abonado = 0;
-            if(register.Receipts.Count() > 0) 
-                abonado = register.Receipts.Where(x => x.Active).Sum(x => x.Amount);
-            balance = register.Total - abonado - receipt.Amount;
+            decimal balance=0, abonado = 0;
+            if(register.Receipts.Where(x => x.IsMainPayment).Count() > 0) 
+                abonado = register.Receipts.Where(x => x.Active && x.IsMainPayment).Sum(x => x.Amount);
+
+            if(receipt.IsMainPayment)
+                balance = register.Total - abonado - receipt.Amount;
+            else
+                balance = register.Total - abonado;
 
             if(balance < 0)
                 return BadRequest($"El monto del recibo sobre pasa la deuda");
