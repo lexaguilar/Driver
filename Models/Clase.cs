@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Driver.Models;
 
-public partial class PaymentType
+public partial class Clase
 {
     public int Id { get; set; }
 
     public string Name { get; set; }
 
-    public bool Active { get; set; }
+    public virtual ICollection<ClaseDetail> ClaseDetails { get; set; } = new List<ClaseDetail>();
 }

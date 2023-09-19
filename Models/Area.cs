@@ -1,25 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-#nullable disable
+namespace Driver.Models;
 
-namespace Driver.Models
+public partial class Area
 {
-    public partial class Area
-    {
-        public Area()
-        {
-            Registers = new HashSet<Register>();
-            Users = new HashSet<User>();
-            Checkups = new HashSet<Checkup>();
-        }
+    public int Id { get; set; }
 
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public bool Active { get; set; }
+    public string Name { get; set; }
 
-        public virtual ICollection<Register> Registers { get; set; }
-        public virtual ICollection<User> Users { get; set; }
-        public virtual ICollection<Checkup> Checkups { get; set; }
-    }
+    public bool Active { get; set; }
+
+    public virtual ICollection<Checkup> Checkups { get; set; } = new List<Checkup>();
+
+    public virtual ICollection<Register> Registers { get; set; } = new List<Register>();
+
+    public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

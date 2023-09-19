@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 
-#nullable disable
+namespace Driver.Models;
 
-namespace Driver.Models
+public partial class User
 {
-    public partial class User
-    {
-        public string Username { get; set; }
-        public string FullName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public int RolId { get; set; }
-        public int AreaId { get; set; }
-        public bool Active { get; set; }
+    public string Username { get; set; }
 
-        public virtual Area Area { get; set; }
-        public virtual Rol Rol { get; set; }
-    }
+    public string FullName { get; set; }
+
+    public string Email { get; set; }
+
+    public string Password { get; set; }
+
+    public int RolId { get; set; }
+
+    public int AreaId { get; set; }
+
+    public bool Active { get; set; }
+
+    public virtual Area Area { get; set; }
+
+    public virtual Rol Rol { get; set; }
 }
