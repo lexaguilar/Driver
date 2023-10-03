@@ -29,7 +29,7 @@ public partial class Client
 
     public int? Age { get; set; }
 
-    public virtual ICollection<ClaseClient> ClaseClients { get; set; } = new List<ClaseClient>();
+    public virtual ICollection<ClientClass> ClientClasses { get; set; } = new List<ClientClass>();
 
     public virtual ICollection<Receipt> Receipts { get; set; } = new List<Receipt>();
 

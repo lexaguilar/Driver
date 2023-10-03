@@ -15,7 +15,7 @@ public partial class Instructor
 
     public bool Active { get; set; }
 
-    public virtual ICollection<ClaseClient> ClaseClients { get; set; } = new List<ClaseClient>();
+    public virtual ICollection<ClientClass> ClientClasses { get; set; } = new List<ClientClass>();
 
     public virtual ICollection<Register> Registers { get; set; } = new List<Register>();
 }

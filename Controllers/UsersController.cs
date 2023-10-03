@@ -32,7 +32,7 @@ namespace Driver.Controllers
         {
 
             
-            var items = _db.Users.Select(x => new { x.Username, x.Email, x.FullName, x.RolId, x.AreaId, x.Active }).Skip(skip).Take(take != 0 ? take : 10).ToArray();
+            var items = _db.Users.Select(x => new { x.Username, x.Email, x.FullName, x.RolId, x.AreaId, x.Active, x.InstructorId }).Skip(skip).Take(take != 0 ? take : 10).ToArray();
             return new JsonResult(new
             {
                 items,
@@ -56,7 +56,7 @@ namespace Driver.Controllers
             }
             else
             {
-                dbusr.CopyFrom(user, x => new { x.AreaId, x.Email, x.FullName, x.RolId });
+                dbusr.CopyFrom(user, x => new { x.AreaId, x.Email, x.FullName, x.RolId, x.InstructorId});
             }
             _db.SaveChanges();
             dbusr.Password = null;
@@ -74,7 +74,7 @@ namespace Driver.Controllers
             _db.SaveChanges();
 
             return new JsonResult(new {
-                user.Username, user.Email, user.FullName, user.RolId, user.AreaId, user.Active
+                user.Username, user.Email, user.FullName, user.RolId, user.AreaId, user.Active, user.InstructorId
             });
         }
 

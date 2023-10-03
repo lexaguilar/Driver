@@ -19,6 +19,8 @@ public partial class User
 
     public bool Active { get; set; }
 
+    public int? InstructorId { get; set; }
+
     public virtual Area Area { get; set; }
 
     public virtual Rol Rol { get; set; }

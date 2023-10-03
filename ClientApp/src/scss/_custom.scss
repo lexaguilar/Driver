@@ -466,7 +466,29 @@
     .w-150 {
         width: 140px;
     }
+
+    .font-15{
+        font-size: 15px;
+    }
+
+    .w-100{
+        width: 100%;
+    }
     
     .grid-small>.dx-datagrid .dx-row>td {
         padding: 2px !important;
+    }
+
+    .bc-popup > div > div.dx-popup-content{
+        background-color: whitesmoke;
+        display: grid;
+        justify-content: center;
+    }
+
+    .clases-client{
+        display: flex;
+    }
+
+    .dx-list .dx-empty-message, .dx-list-item-content {
+        padding: 2px;
     }

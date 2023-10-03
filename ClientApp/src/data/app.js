@@ -37,6 +37,7 @@ export const resources = {
     instructores : 6,
     app: 7,
     verSucursales:8,
+    registrarClases:9,
 }
 
 export const dataAccess = {

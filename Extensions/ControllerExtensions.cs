@@ -28,6 +28,9 @@ namespace Driver.Extensions
                         case AppClaimTypes.RolId:
                             usr.RolId = Convert.ToInt32(c.Value);
                             break;
+                        case AppClaimTypes.InstructorId:
+                            usr.InstructorId = Convert.ToInt32(c.Value);
+                            break;
                     }
                 }
             }           

@@ -18,6 +18,7 @@ namespace Driver.Services
     {
         internal const string AreaId = "AreaId";
         internal const string RolId = "RolId";
+        internal const string InstructorId = "InstructorId";
     }
     public interface IUserService
     {
@@ -99,6 +100,7 @@ namespace Driver.Services
             //Agregar resursos
             identity.AddClaim(new Claim(AppClaimTypes.AreaId, user.AreaId.ToString()));
             identity.AddClaim(new Claim(AppClaimTypes.RolId, user.RolId.ToString()));
+            identity.AddClaim(new Claim(AppClaimTypes.InstructorId, user.InstructorId.ToString()));
 
             return identity;
         }

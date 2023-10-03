@@ -7,4 +7,5 @@ namespace Driver.Models
      public partial class PaymentType : ICatalogo {  }
      public partial class DischargeType : ICatalogo {  }
      public partial class Concept : ICatalogo {  }
+     public partial class Clase : ICatalogo {  }
 }

@@ -20,6 +20,18 @@ namespace Driver.Controllers
             this._db = db;
         }
 
+        [Route("api/clients/get/{identification}")]
+        public IActionResult Get(string identification)
+        {
+                
+                var client = _db.Clients.FirstOrDefault(x => x.Identification == identification);
+                if (client == null)
+                {
+                    client = new Client();
+                }
+                return Json(client);
+        }
+
 
         [Route("api/clients/get")]
         public IActionResult Get(int skip, int take, IDictionary<string, string> values)
@@ -30,7 +42,7 @@ namespace Driver.Controllers
             if (values.ContainsKey("name"))
             {
                 var name = Convert.ToString(values["name"]);
-                clients = clients.Where(x => x.Name.Contains(name));
+                clients = clients.Where(x => x.Name.Contains(name) || x.Identification.StartsWith(name));
             }
 
             if (values.ContainsKey("identification"))

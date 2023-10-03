@@ -12,6 +12,7 @@ import { calificationDialog } from '../../store/calification/calificationReducer
 import { cancelRegisterDialog } from '../../store/cancelRegister/cancelRegisterReducer';
 import { detailsDialog } from '../../store/details/detailsReducer';
 import { receiptDialog } from '../../store/receipt/receiptReducer';
+import { claseDialog } from '../../store/clases/claseReducer';
 import { cellRenderBold, copyText } from '../../utils/common';
 import { createStore } from '../../utils/proxy';
 import urlReport from '../../services/reportServices';
@@ -22,8 +23,10 @@ import DialogCancel from './DialogCancel';
 import Details from './Details';
 import Recibo from './Recibo';
 import Certificate from './Certificate';
+import PlanClase from './PlanClase';
 
-const Registers = () => {
+const Registers = (props) => {
+    console.log(props)
 
     const dispatch = useDispatch();
     const [viewComplete, setViewComplete] = useState(true);
@@ -55,6 +58,7 @@ const Registers = () => {
     const openDialogCancelRegister = id => dispatch(cancelRegisterDialog({ open: true, id }));
     const openDialogDetails = id => dispatch(detailsDialog({ open: true, id }));
     const openDialogReceipt = id => dispatch(receiptDialog({ open: true, id }));
+    const openDialogClase = id => dispatch(claseDialog({ open: true, id }));
 
     const addMenuItems = (e) => {
 
@@ -65,6 +69,12 @@ const Registers = () => {
                 text: `Registrar notas`,
                 icon: 'edit',
                 onItemClick: () => openDialogCalification(e.row.data.id)
+            }, {
+                text: `Plan de Clases`,
+                icon: 'doc',
+                onItemClick: () => {
+                    props.history.push(`/driver/plan-clases-review`, { id: e.row.data.clientId });
+                }
             }, {
                 text: `Detalles`,
                 icon: 'bulletlist',

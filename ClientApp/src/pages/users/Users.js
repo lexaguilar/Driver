@@ -146,13 +146,16 @@ const Users = () => {
                     <Column dataField="rolId" width={160} caption="Permisos">
                         <Lookup disabled={true} dataSource={createStore({name :'rol'})} valueExpr="id" displayExpr="name" />
                     </Column>
+                    <Column dataField="instructorId" width={160} caption="Instructor">
+                        <Lookup disabled={true} dataSource={createStore({name :'instructor'})} valueExpr="id" displayExpr="name" />
+                    </Column>
                     <Column dataField="active" caption="Activo" dataType="boolean"  width={100}/>
                     <Editing
                         mode="popup"
                         allowUpdating={true}    
                         useIcons={true}                        
                     >
-                        <Popup title={title} showTitle={true} width={400} height={390}>                           
+                        <Popup title={title} showTitle={true} width={400} height={440}>                           
                         </Popup>
                         <Form colCount={1}>
                             <Item dataField="username">
@@ -170,6 +173,9 @@ const Users = () => {
                                 <RequiredRule message="La sucursal es requerida" />
                             </Item>
                             <Item dataField="rolId" >
+                                <RequiredRule message="El rol es requerido" />
+                            </Item>
+                            <Item dataField="instructorId" >
                                 <RequiredRule message="El rol es requerido" />
                             </Item>
 

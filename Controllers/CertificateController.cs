@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 namespace Driver.Controllers
 {
     [AllowAnonymous]
@@ -89,7 +88,22 @@ namespace Driver.Controllers
 
         }
 
+        // [Route("api/certificate/clase-{id}")]
+        // public IActionResult GetClase(int id)
+        // {
+        //     var clasesclient = _db.ClientClasses
+        //     .Include(x => x.Instructor)
+        //     .Include(x => x.Client)
+        //     .Where(x => x.ClientId == id).ToList();
 
+        //     var report = new AppReportCore6
+            
+        //     // var result = new FileStreamResult(stream,"application/pdf");
+        //     // return result;
+
+        // }
 
     }
+
+
 }

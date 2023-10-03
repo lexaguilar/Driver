@@ -12,8 +12,9 @@ public partial class ClaseDetail
     public string Name { get; set; }
 
     public bool Active { get; set; }
+    public int? Peso { get; set; }
 
     public virtual Clase Clase { get; set; }
 
-    public virtual ICollection<ClaseClientDetail> ClaseClientDetails { get; set; } = new List<ClaseClientDetail>();
+    public virtual ICollection<ClientClassQuestion> ClientClassQuestions { get; set; } = new List<ClientClassQuestion>();
 }

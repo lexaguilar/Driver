@@ -13,7 +13,7 @@ const Authorized = isAuthorization => component => {
  * @return {{isAuthorization: false  Unauthorized}} token
  */
 const useAuthorization = ([resourceId, action]) => {
-    
+
     const user = userService.getUser();
 
     const resource = user.resources.find(x => x.resource == resourceId);

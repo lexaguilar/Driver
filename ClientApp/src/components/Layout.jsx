@@ -15,6 +15,7 @@ import MobileMenu from './mobile/MobileMenu';
 import { _path } from '../data/headerNavigation';
 import PrivateRoute from './header/PrivateRouter';
 import Registers from '../pages/registers/Registers';
+import PlanDePlasesIngreso from '../pages/registers/PlanDePlasesIngreso';
 import Clients from '../pages/clients/Clients';
 import Areas from '../pages/areas/Areas';
 import Users from '../pages/users/Users';
@@ -28,6 +29,7 @@ import Checkup from '../pages/checkup/Checkup';
 import Concepts from '../pages/concepts/Concepts';
 import DischargeTypes from '../pages/dischargeTypes/DischargeTypes';
 import Nuevo from '../pages/checkup/Nuevo';
+import PlanClase from '../pages/registers/PlanClase';
 
 
 function Layout(props) {
@@ -53,6 +55,8 @@ function Layout(props) {
         ,builRoute('checkup', Checkup)
         ,builRoute('checkup/details', Nuevo)
         ,builRoute('app', App)
+        ,builRoute('plan-de-clases', PlanDePlasesIngreso)
+        ,builRoute('plan-clases-review', PlanClase)
         
     ];
 

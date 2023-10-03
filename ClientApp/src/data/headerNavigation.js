@@ -20,6 +20,10 @@ const menu = [{
     url: `${_path.root}/recibos`   
 },{
     layout: 'driver',
+    title: 'Clases',
+    url: `${_path.root}/plan-de-clases`   
+},{
+    layout: 'driver',
     title: 'Configuración',
     url: `` ,
     submenu: {

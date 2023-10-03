@@ -23,13 +23,13 @@ public partial class DriverContext : DbContext
 
     public virtual DbSet<Clase> Clases { get; set; }
 
-    public virtual DbSet<ClaseClient> ClaseClients { get; set; }
-
-    public virtual DbSet<ClaseClientDetail> ClaseClientDetails { get; set; }
-
     public virtual DbSet<ClaseDetail> ClaseDetails { get; set; }
 
     public virtual DbSet<Client> Clients { get; set; }
+
+    public virtual DbSet<ClientClass> ClientClasses { get; set; }
+
+    public virtual DbSet<ClientClassQuestion> ClientClassQuestions { get; set; }
 
     public virtual DbSet<Concept> Concepts { get; set; }
 
@@ -58,6 +58,8 @@ public partial class DriverContext : DbContext
     public virtual DbSet<TypeLicence> TypeLicences { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<VwClasesClient> VwClasesClients { get; set; }
 
     public virtual DbSet<VwReceipt> VwReceipts { get; set; }
 
@@ -128,40 +130,6 @@ public partial class DriverContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<ClaseClient>(entity =>
-        {
-            entity.HasOne(d => d.Client).WithMany(p => p.ClaseClients)
-                .HasForeignKey(d => d.ClientId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClaseClients_Clients");
-
-            entity.HasOne(d => d.Instructor).WithMany(p => p.ClaseClients)
-                .HasForeignKey(d => d.InstructorId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClaseClients_Instructors");
-        });
-
-        modelBuilder.Entity<ClaseClientDetail>(entity =>
-        {
-            entity.Property(e => e.ClassDateTime).HasColumnType("datetime");
-            entity.Property(e => e.ClientSign)
-                .IsRequired()
-                .HasMaxLength(2000);
-            entity.Property(e => e.CreateBy)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
-            entity.Property(e => e.Observation)
-                .HasMaxLength(250)
-                .IsUnicode(false);
-
-            entity.HasOne(d => d.ClaseDetail).WithMany(p => p.ClaseClientDetails)
-                .HasForeignKey(d => d.ClaseDetailId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClaseClientDetails_ClaseDetails");
-        });
-
         modelBuilder.Entity<ClaseDetail>(entity =>
         {
             entity.Property(e => e.Name)
@@ -213,6 +181,52 @@ public partial class DriverContext : DbContext
                 .HasMaxLength(1)
                 .IsUnicode(false)
                 .IsFixedLength();
+        });
+
+        modelBuilder.Entity<ClientClass>(entity =>
+        {
+            entity.Property(e => e.ClassDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateAt).HasColumnType("datetime");
+            entity.Property(e => e.CreateBy)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Observation)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.SignatureClient)
+                .IsRequired()
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Clase).WithMany(p => p.ClientClasses)
+                .HasForeignKey(d => d.ClaseId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ClientClasses_Clases");
+
+            entity.HasOne(d => d.Client).WithMany(p => p.ClientClasses)
+                .HasForeignKey(d => d.ClientId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ClientClasses_Clients");
+
+            entity.HasOne(d => d.Instructor).WithMany(p => p.ClientClasses)
+                .HasForeignKey(d => d.InstructorId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ClientClasses_Instructors");
+        });
+
+        modelBuilder.Entity<ClientClassQuestion>(entity =>
+        {
+            entity.Property(e => e.Evaluation).HasColumnType("decimal(18, 0)");
+
+            entity.HasOne(d => d.ClaseQuestion).WithMany(p => p.ClientClassQuestions)
+                .HasForeignKey(d => d.ClaseQuestionId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ClientClassQuestions_ClaseDetails");
+
+            entity.HasOne(d => d.ClientClass).WithMany(p => p.ClientClassQuestions)
+                .HasForeignKey(d => d.ClientClassId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ClientClassQuestions_ClientClasses");
         });
 
         modelBuilder.Entity<Concept>(entity =>
@@ -483,6 +497,22 @@ public partial class DriverContext : DbContext
                 .HasForeignKey(d => d.RolId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Users_Rols");
+        });
+
+        modelBuilder.Entity<VwClasesClient>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("VwClasesClient");
+
+            entity.Property(e => e.Clase)
+                .IsRequired()
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.ClientName)
+                .IsRequired()
+                .HasMaxLength(100)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<VwReceipt>(entity =>

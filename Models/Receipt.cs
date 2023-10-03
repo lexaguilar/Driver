@@ -33,11 +33,12 @@ public partial class Receipt
 
     public int? ConceptId { get; set; }
 
-    public bool? IsMainPayment { get; set; }
+    public bool IsMainPayment { get; set; }
 
     public virtual Client Client { get; set; }
 
     public virtual Concept Concept { get; set; }
 
     public virtual Register Register { get; set; }
+    public virtual PaymentType PaymentType { get; set; }
 }

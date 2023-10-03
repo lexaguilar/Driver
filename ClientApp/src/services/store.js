@@ -1,4 +1,5 @@
 import CustomStore from 'devextreme/data/custom_store';
+import DataSource from "devextreme/data/data_source"; 
 import notify from 'devextreme/ui/notify';
 import http from '../utils/http';
 import { required } from '../utils/proxy';
@@ -162,6 +163,23 @@ const store =
         return customStore;
     }
 
+    const dataSourceSelect = (url, urlByKey) => new DataSource({
+        load: (loadOptions) => {
+    
+            let params = {};
+            params.skip = loadOptions.skip || 0;
+            params.take = loadOptions.take || 10;
+    
+            if(loadOptions.searchValue)
+                params.name = loadOptions.searchValue  ;
+    
+            return http(url)
+            .asGet(params).then(x => x.items);
+            
+        },
+        byKey: id => http(urlByKey).asGet(),
+        paginate : true,
+        pageSize: 10
+    })
 
-
-export { store }
+export { store, dataSourceSelect }
