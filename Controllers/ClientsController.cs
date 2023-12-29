@@ -34,7 +34,7 @@ namespace Driver.Controllers
 
 
         [Route("api/clients/get")]
-        public IActionResult Get(int skip, int take, IDictionary<string, string> values)
+        public IActionResult Get(int skip, int take,bool order, IDictionary<string, string> values)
         {
 
             IQueryable<Client> clients = _db.Clients;
@@ -51,6 +51,39 @@ namespace Driver.Controllers
                 clients = clients.Where(x => x.Identification.Contains(identification));
             }
 
+            if(order)            
+                clients = clients.OrderByDescending(x => x.Id);            
+          
+            var items = clients.Skip(skip).Take(take);
+            
+            return Json(new
+            {
+                items,
+                totalCount = clients.Count()
+            });
+
+        }
+
+        [Route("api/clients/get-ordered")]
+        public IActionResult GetOrdered(int skip, int take, IDictionary<string, string> values)
+        {
+
+            IQueryable<Client> clients = _db.Clients;
+
+            if (values.ContainsKey("name"))
+            {
+                var name = Convert.ToString(values["name"]);
+                clients = clients.Where(x => x.Name.Contains(name) || x.Identification.StartsWith(name));
+            }
+
+            if (values.ContainsKey("identification"))
+            {
+                var identification = Convert.ToString(values["identification"]);
+                clients = clients.Where(x => x.Identification.Contains(identification));
+            }
+                  
+            clients = clients.OrderByDescending(x => x.Id);            
+          
             var items = clients.Skip(skip).Take(take);
             
             return Json(new

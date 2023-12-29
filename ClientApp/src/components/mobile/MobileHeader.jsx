@@ -89,29 +89,7 @@ class MobileHeader extends Component {
                             </button>
                             <Link to="/" className="mobile-header__logo">Driver's</Link>
                             <div className={searchClasses} ref={this.setSearchWrapperRef}>
-                                <form className="mobile-header__search-form" action="">
-                                    <input
-                                        className="mobile-header__search-input"
-                                        name="search"
-                                        placeholder="Buscar cliente"
-                                        aria-label="Site search"
-                                        type="text"
-                                        autoComplete="off"
-                                        onKeyDown={this.handleSearchKeyDown}
-                                        ref={this.setSearchInputRef}
-                                    />
-                                    <button type="submit" className="mobile-header__search-button mobile-header__search-button--submit">
-                                        <Search20Svg />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="mobile-header__search-button mobile-header__search-button--close"
-                                        onClick={this.handleCloseSearch}
-                                    >
-                                        <Cross20Svg />
-                                    </button>
-                                    <div className="mobile-header__search-body" />
-                                </form>
+                                
                             </div>
 
                             <div className="mobile-header__indicators">

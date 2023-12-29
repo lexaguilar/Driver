@@ -300,7 +300,7 @@ const PlanDePlasesIngreso = () => {
                                 placeholder="Selecciona un alumno"
                                 showClearButton={true} valueExpr="identification" displayExpr={item => item ? `${item.identification} - ${item.name}` : ''} 
                                 onValueChanged={onValueChanged}     
-                                dataSource={dataSourceSelect('clients/get', 'clients/get')}
+                                dataSource={dataSourceSelect('clients/get-ordered', 'clients/get-ordered')}
                             />
                             <button disabled={!client.identification} className="btn btn-outline-secondary" onClick={searhClient} type="button">
                                 {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : 'Buscar'}

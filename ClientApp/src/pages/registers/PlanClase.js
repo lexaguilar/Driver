@@ -130,8 +130,6 @@ import urlReport from '../../services/reportServices';
 
 export const PlanClase = (props) => {
 
-    console.log(props)
-
     let id = 0;
     id = props.location.state?.id || 0;
 
@@ -171,18 +169,24 @@ export const PlanClase = (props) => {
 
     }
 
+    const clientName = clases.length > 0 ? clases[0].clientName : '';
+
     return (
-        <div className='container medium'>           
-              <Accordion
+        <div className='container medium'>    
+                <div style={{display:'flex', justifyContent: 'space-between'}}>
+                    <h5 className="text-center">{clientName}</h5>   
+                    <button  className="btn btn-outline-secondary" onClick={printClass} type="button">
+                        Imprimir 
+                    </button>
+                </div>
+                <Accordion
                     dataSource={clases} 
                     itemTitleRender={CustomTitle}
                     itemComponent={CustomItem}
                     collapsible={true}
                     id="accordion-container"
                 />
-                <button  className="btn btn-outline-secondary" onClick={printClass} type="button">
-                    Imprimir 
-                </button>
+                
         </div>
     );
 }

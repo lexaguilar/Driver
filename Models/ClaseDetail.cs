@@ -12,7 +12,10 @@ public partial class ClaseDetail
     public string Name { get; set; }
 
     public bool Active { get; set; }
+
     public int? Peso { get; set; }
+
+    public int ClassOrder { get; set; }
 
     public virtual Clase Clase { get; set; }
 

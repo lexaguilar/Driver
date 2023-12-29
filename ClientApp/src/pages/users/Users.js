@@ -175,8 +175,7 @@ const Users = () => {
                             <Item dataField="rolId" >
                                 <RequiredRule message="El rol es requerido" />
                             </Item>
-                            <Item dataField="instructorId" >
-                                <RequiredRule message="El rol es requerido" />
+                            <Item dataField="instructorId" editorOptions={{ showClearButton:true }} >
                             </Item>
 
                         </Form>

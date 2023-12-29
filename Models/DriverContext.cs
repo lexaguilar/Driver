@@ -65,9 +65,12 @@ public partial class DriverContext : DbContext
 
     public virtual DbSet<VwRegister> VwRegisters { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder){
+
+        if(!optionsBuilder.IsConfigured)
+            optionsBuilder.UseSqlServer("Server=SQL5107.site4now.net;Database=db_a13b77_drivertest;User Id=db_a13b77_drivertest_admin;Password=drivertest123;");
+    }
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=SQL5107.site4now.net;Database=db_a13b77_drivertest;User Id=db_a13b77_drivertest_admin;Password=drivertest123;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

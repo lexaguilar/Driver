@@ -30,7 +30,14 @@ function Login(props) {
         userService.login(user)
         .then(userResp => {
 
+            const currentUser = userService.getUser();
+            
+            var isInstructorId = currentUser.instructorId > 0;
+            
             let pathname = (props?.location?.state?.from?.pathname || '/driver');
+
+            if (isInstructorId)
+                pathname = '/driver/plan-de-clases';
 
             pathname = pathname.includes('login') ? '/driver' : pathname;
 

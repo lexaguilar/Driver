@@ -100,7 +100,7 @@ namespace Driver.Services
             //Agregar resursos
             identity.AddClaim(new Claim(AppClaimTypes.AreaId, user.AreaId.ToString()));
             identity.AddClaim(new Claim(AppClaimTypes.RolId, user.RolId.ToString()));
-            identity.AddClaim(new Claim(AppClaimTypes.InstructorId, user.InstructorId.ToString()));
+            identity.AddClaim(new Claim(AppClaimTypes.InstructorId, (user.InstructorId??0).ToString()));
 
             return identity;
         }
